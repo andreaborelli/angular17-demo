@@ -7,9 +7,9 @@ import { RouterOutlet } from '@angular/router';
   standalone: true,
   imports: [],
   template: `
-  <button (click)="currentIndex = currentIndex + 1">+</button> <!-- Events -->
+  <button (click)="prev()">-</button> <!-- Class Methods -->
   <span>{{currentIndex}}</span>
-  <button (click)="currentIndex = currentIndex - 1">-</button>
+  <button (click)="next()">+</button>
   `,
   styles: [],
 })
@@ -17,6 +17,17 @@ export class AppComponent {
 
 
   currentIndex = 0;
+
+  prev(){
+    // this.currentIndex = this.currentIndex - 1
+    // oppure
+    --this.currentIndex
+  }
+  next(){
+    // this.currentIndex = this.currentIndex + 1;
+    // oppure
+    ++this.currentIndex
+  }
 
 }
 
