@@ -21,7 +21,7 @@ import { RouterOutlet } from '@angular/router';
     </div>
 
   `,
-  styleUrl: './app.component.css',
+  styleUrl: './app.component.css', /* styleUrl: singolo path no array*/
 })
 export class AppComponent {
 
