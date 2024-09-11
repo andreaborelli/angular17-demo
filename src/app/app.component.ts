@@ -21,7 +21,26 @@ import { RouterOutlet } from '@angular/router';
     </div>
 
   `,
-  styleUrl: './app.component.css', /* styleUrl: singolo path no array*/
+
+  styles: `  /* la regola css non viene inserita in un array con parentesi quadre  */
+    .alert {
+      padding: 20px;
+      border: 4px solid black;
+      border-radius: 20px;
+  }
+    .primary {
+      background-color: blueviolet;
+      color: white;
+  }
+    .danger {
+      background-color: darkred;
+      color: white;
+  }
+    .success {
+      background-color: lightgreen;
+      color: black;
+  }
+  `,
 })
 export class AppComponent {
 
