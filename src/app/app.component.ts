@@ -8,21 +8,25 @@ import { RouterOutlet } from '@angular/router';
   imports: [],
   template: `
 
-<div class="alert primary">
-        message
-    </div>
+<!-- dynamic class -->
+  <div
+    class="alert"
+    [class.primary]="alert.type === 'primary'"
+    [class.danger]="alert.type === 'danger'"
+    [class.success]="alert.type === 'success'"
+    >
+        {{alert.msg}}
+  </div>
 
-    <div class="alert danger">
-        message
-    </div>
+  <!-- rendiamolo dinamico -->
 
-    <div class="alert success">
-        message
-    </div>
+  <button (click)="alert = {type: 'primary', msg: 'primary'}">Primary</button>
+  <button (click)="alert = {type: 'danger', msg: 'danger'}">Danger</button>
+  <button (click)="alert = {type: 'success', msg: 'success'}">Success</button>
 
   `,
 
-  styles: `  /* la regola css non viene inserita in un array con parentesi quadre  */
+  styles: `  /* la regola css non viene inserita in un array con parentesi quadre */
     .alert {
       padding: 20px;
       border: 4px solid black;
@@ -44,6 +48,14 @@ import { RouterOutlet } from '@angular/router';
 })
 export class AppComponent {
 
+  // alert = 'success';
+  // msg = 'hello alert!';
+
+  // oggetto alert
+  alert = {
+    type: 'primary',
+    msg: 'hello alert!',
+  }
 
 
 }
