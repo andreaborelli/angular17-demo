@@ -1,26 +1,45 @@
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { RouterOutlet } from '@angular/router';
+import { NgClass } from '@angular/common';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [],
+  imports: [
+    NgClass
+  ],
   template: `
 
 <!-- dynamic class -->
   <div
-    [class]="getCls()"
-
+    class="alert"
+    [ngClass]="
+    {primary: alert.type === 'primary',
+    danger: alert.type === 'danger',
+    success: alert.type === 'success'
+    }"
     >
         {{alert.msg}}
 
-          <!-- per svariate ragioni potrebbe essere che l'applicazione di una classe primary, danger ecc... o qualunque altra classe
-           dipenda da un algoritmo più complesso,
-           potrebbe quindi avere senso chiamare una funzione che generi il valore di alert,
-           in questa funzione potremmo mettere qualunque tipologia di calcoli, dai cicli, a switch, condizioni ecc...
-           si può fare wrappando l'attributo class con le perentesi quadre, e invocando la funzione [class]="getCls()"
-           che sarà invocata ogni qualvolta il template viene renderizzato -->
+<!-- ngClass: le direttive sono degli attributi speciali che ci fornisce angular
+ per applicare delle piccole magie nel template   -->
+
+ <!-- una regola per utilizzare una direttiva all'interno del template html
+  è quella di importarla nella proprietà imports del decoratore @Components tramite l'apposita classe,
+  una volta importata possiamo utilizzarla nel nostro template,
+  quindi sia in imports riga 1 che definirla anche tra gli imports
+  allora la direttiva sarà disponibile, e questa direttiva
+  nello specifico da la possibilità di applicare classi dinamicamente,
+  tramite un oggetto chiave/valore dove la chiave è la classe CSS che vogliamo applicare es. primary,
+  invece il valore è un booleano es. true
+  potremmo anche avere due condizioni true, in questo caso saranno applicate entrambi le classi CSS,
+  ovviamente nel caso di Overlap: sovrapposizione di stili css applicati vince la classe che avrà una specificity maggiore
+  info su:
+           https://www.w3schools.com/css/css_specificity.asp
+
+           https://developer.mozilla.org/en-US/docs/Web/CSS/Specificity
+
+           https://css-tricks.com/specifics-on-css-specificity/
+  -->
 
   </div>
 
@@ -63,26 +82,6 @@ export class AppComponent {
     msg: 'hello alert!',
   }
 
-  getCls() {
-    switch (this.alert.type) {
-      case 'danger':
-        return 'alert danger'; // restituisce la classe alert danger
-      case 'success':
-        return 'alert success';
 
-        case 'primary':
-        default:
-          return 'alert primary';
-  }
-/* ebbene ricordare che ad ogni render del componente, la classe getCls() viene invocata,
-questo vuol dire che ci potrebbero essere altri pulsanti, campi di input, timer ecc.
-che triggherano la change detection ovvero fanno si che il template viene ri-renderizzato,
-la funzione getCls() verrà processata ad ogni render anche quando non necessario,
-quindi questo approccio meglio evitarlo, per non avere problemi di performance dovuti al fatto che
-nella view ci potrebbero essere altri pulsanti, timer, chiamate al server ecc.che triggherano
-la change detection quindi il template verrebbe ri-renderizzato, e la getCls()
-verrebbe processata ogni volta anche quando non necessario ovvero quando alert non cambia.  */
-
-}
 
 }
