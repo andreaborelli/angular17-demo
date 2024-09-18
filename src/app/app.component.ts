@@ -12,34 +12,18 @@ import { NgClass } from '@angular/common';
 <!-- dynamic class -->
   <div
     class="alert"
-    [ngClass]="
-    {primary: alert.type === 'primary',
-    danger: alert.type === 'danger',
-    success: alert.type === 'success'
-    }"
+    [ngClass]="getCls()"
     >
         {{alert.msg}}
 
 <!-- ngClass: le direttive sono degli attributi speciali che ci fornisce angular
  per applicare delle piccole magie nel template   -->
 
- <!-- una regola per utilizzare una direttiva all'interno del template html
-  è quella di importarla nella proprietà imports del decoratore @Components tramite l'apposita classe,
-  una volta importata possiamo utilizzarla nel nostro template,
-  quindi sia in imports riga 1 che definirla anche tra gli imports
-  allora la direttiva sarà disponibile, e questa direttiva
-  nello specifico da la possibilità di applicare classi dinamicamente,
-  tramite un oggetto chiave/valore dove la chiave è la classe CSS che vogliamo applicare es. primary,
-  invece il valore è un booleano es. true
-  potremmo anche avere due condizioni true, in questo caso saranno applicate entrambi le classi CSS,
-  ovviamente nel caso di Overlap: sovrapposizione di stili css applicati vince la classe che avrà una specificity maggiore
-  info su:
-           https://www.w3schools.com/css/css_specificity.asp
+ <!-- la direttiva ngClass non solo offre la possibilità di applicare delle classi dinamicamente tramite un oggetto
+  con chiave/valore ma supporta anche degli array es. [ngClass]="['class1', 'class2']"
+  può essere generato dinamicamente es. un array di classi CSS generato da una funzione, un metodo getCls()
+  inoltre supporta anche le stringhe -->
 
-           https://developer.mozilla.org/en-US/docs/Web/CSS/Specificity
-
-           https://css-tricks.com/specifics-on-css-specificity/
-  -->
 
   </div>
 
@@ -82,6 +66,21 @@ export class AppComponent {
     msg: 'hello alert!',
   }
 
+  getCls() {
+    // 1. string
+    // return 'alert primary';
+
+    // 2. array
+    // return ['alert', 'primary'];
+    
+    // 3. object
+    return {
+      'success': this.alert.type === 'success',
+      'primary': this.alert.type === 'primary',
+      'danger': this.alert.type === 'danger',
+    }
+
+  }
 
 
 }
