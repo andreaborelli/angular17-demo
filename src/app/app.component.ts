@@ -1,35 +1,54 @@
 import { Component } from '@angular/core';
-import { NgClass } from '@angular/common';
+import { NgStyle } from '@angular/common';
 
 @Component({
   selector: 'app-root',
   standalone: true,
   imports: [
-    NgClass
+    NgStyle
   ],
   template: `
 
 <!-- dynamic class -->
   <div
     class="alert"
-    [style.background-color]="alert.bg"
-    [style.color]="alert.color"
-    [style.font-size.px]="alert.fontSize"
-    >
-        {{alert.msg}}
+    [ngStyle]="styles"
 
-  <!-- style suffix operator alternativa:[style.font-size]="alert.fontSize + 'px'"
-   possiamo usare anche le altre unità di misura-->
+    >
+        {{text}}
+
+  <!-- con la direttiva ngStyle applichiamo un oggetto di proprietà CSS direttamente ad un elemento del template,
+   richiede anche di essere importata dal pacchetto angular common: import { NgStyle } from '@angular/common';
+ e inserita tra gli import del componente affinchè possa essere utlilizzata -->
 
 <!-- inline-style classi CSS in in line in modo dinamico, flessibile -->
 
   </div>
 
-  <!-- rendiamolo dinamico -->
+  <!-- styles è il valore della direttiva ngStyle -->
 
-  <button (click)="alert = { bg: 'cyan', color: 'black',fontSize: 10,  msg: 'hello' }">Primary</button>
-  <button (click)="alert = { bg: 'red', color: 'white', fontSize: 20, msg: 'white' }">Danger</button>
-  <button (click)="alert = { bg: 'green', color: 'white', fontSize: 30, msg: 'Ok!' }">Success</button>
+  <button (click)="styles = { backgroundColor: 'cyan', color: 'black',fontSize: '10px' }">Primary</button>
+  <button (click)="styles = { backgroundColor: 'red', color: 'white', fontSize: '20px' }">Danger</button>
+  <button (click)="styles = { backgroundColor: 'green', color: 'white', fontSize: '30px' }">Success</button>
+
+<!-- una soluzione alternativa che invoca una funzione:
+
+ [ngStyle]="getStyles()"
+
+invece di impostare una proprietà:
+
+ <div
+      class="alert"
+      [ngStyle]="getStyles()"
+    >
+        {{ alert.msg }}
+    </div>
+
+    <button (click)="alert = {msg: 'hello 1', type: 'primary'}">primary</button>
+    <button (click)="alert = {msg: 'hello 2', type: 'danger'}">danger</button>
+    <button (click)="alert = {msg: 'hello 3', type: 'success'}">success</button>
+
+ -->
 
   `,
 
@@ -47,11 +66,34 @@ export class AppComponent {
   // msg = 'hello alert!';
 
   // oggetto alert
-  alert = {
-    bg: 'red',
+  styles = {
+    backgroundColor: 'red',
     color: 'white',
-    msg: 'hello alert!',
-    fontSize: 20
+    fontSize: '100px'
   }
+  text = "Hello CSS";
+
+
+
+ /* una soluzione alternativa che invoca una funzione:
+
+  [ngStyle]="getStyles()"
+
+ invece di impostare una proprietà:
+
+   alert: Alert = {
+    msg: 'hello',
+    type: 'primary'
+  }
+
+  getStyles() {
+    switch (this.alert.type) {
+      case 'danger': return { backgroundColor: 'darkred', text: 'white' }
+      case 'success': return { backgroundColor: 'lightgreen', text: 'black' }
+      default:
+        return  { backgroundColor: 'blueviolet', text: 'white' }
+    }
+  }
+ */
 
 }
