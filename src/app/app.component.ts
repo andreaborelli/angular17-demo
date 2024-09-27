@@ -14,8 +14,12 @@ import { NgClass } from '@angular/common';
     class="alert"
     [style.background-color]="alert.bg"
     [style.color]="alert.color"
+    [style.font-size.px]="alert.fontSize"
     >
         {{alert.msg}}
+
+  <!-- style suffix operator alternativa:[style.font-size]="alert.fontSize + 'px'"
+   possiamo usare anche le altre unità di misura-->
 
 <!-- inline-style classi CSS in in line in modo dinamico, flessibile -->
 
@@ -23,9 +27,9 @@ import { NgClass } from '@angular/common';
 
   <!-- rendiamolo dinamico -->
 
-  <button (click)="alert = { bg: 'cyan', color: 'black', msg: 'hello' }">Primary</button>
-  <button (click)="alert = { bg: 'red', color: 'white', msg: 'white' }">Danger</button>
-  <button (click)="alert = { bg: 'green', color: 'white', msg: 'Ok!' }">Success</button>
+  <button (click)="alert = { bg: 'cyan', color: 'black',fontSize: 10,  msg: 'hello' }">Primary</button>
+  <button (click)="alert = { bg: 'red', color: 'white', fontSize: 20, msg: 'white' }">Danger</button>
+  <button (click)="alert = { bg: 'green', color: 'white', fontSize: 30, msg: 'Ok!' }">Success</button>
 
   `,
 
@@ -47,6 +51,7 @@ export class AppComponent {
     bg: 'red',
     color: 'white',
     msg: 'hello alert!',
+    fontSize: 20
   }
 
 }
