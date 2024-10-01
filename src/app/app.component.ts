@@ -28,7 +28,23 @@ type Alert = {
     <button (click)="alert = {msg: 'hello 1', type: 'primary'}">primary</button>
     <button (click)="alert = {msg: 'hello 2', type: 'danger'}">danger</button>
     <button (click)="alert = {msg: 'hello 3', type: 'success'}">success</button>
-      <!-- https://getbootstrap.com/ Include via CDN CSS di bootstrap servito da un host esterno -->
+      <!-- https://getbootstrap.com/ Include via NPM  npm i bootstrap@5.3.3
+       poi vedremo la dipendenza installata di bootstrap in file package.json:
+
+      "dependencies": {
+        "bootstrap": "^5.3.3",
+     },
+      e poi in node_modules vedremo la cartella bootstrap, in dist,
+      CSS in fine il file bootstrap.min.css, e tutti gli altri file di bootstrap sia compilati che sorgente,
+      dopodicchè possiamo includere il file CSS in index.html
+      <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css"> ma non funzionerà
+      perché Angular non sa dove cercare i file CSS, quindi dobbiamo configurare il file angular.json
+      in styles aggiungendo il percorso del file CSS di bootstrap, in questo caso node_modules/bootstrap/dist/css/bootstrap.min.css
+      "styles": [
+        "src/styles.css",
+        "node_modules/bootstrap/dist/css/bootstrap.min.css"
+      ],
+     -->
 
   `,
 
