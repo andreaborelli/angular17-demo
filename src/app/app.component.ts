@@ -13,42 +13,57 @@ type Alert = {
     NgClass
   ],
   template: `
-    <!-- classe alert hardcoded quindi statica, infatti la possiamo ispezionere nell'HTML -->
+    <!-- Tailwind CSS -->
     <div
       class="alert"
       [ngClass]="{
-        'bg-primary': alert.type === 'primary',
-        'bg-danger': alert.type === 'danger',
-        'bg-success': alert.type === 'success',
+        'alert-primary': alert.type === 'primary',
+        'alert-danger': alert.type === 'danger',
+        'alert-success': alert.type === 'success',
       }"
     >
         {{ alert.msg }}
     </div>
 
-    <button (click)="alert = {msg: 'hello 1', type: 'primary'}">primary</button>
-    <button (click)="alert = {msg: 'hello 2', type: 'danger'}">danger</button>
-    <button (click)="alert = {msg: 'hello 3', type: 'success'}">success</button>
-      <!-- https://getbootstrap.com/ Include via NPM  npm i bootstrap@5.3.3
-       poi vedremo la dipendenza installata di bootstrap in file package.json:
-
-      "dependencies": {
-        "bootstrap": "^5.3.3",
-     },
-      e poi in node_modules vedremo la cartella bootstrap, in dist,
-      CSS in fine il file bootstrap.min.css, e tutti gli altri file di bootstrap sia compilati che sorgente,
-      dopodicchè possiamo includere il file CSS in index.html
-      <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css"> ma non funzionerà
-      perché Angular non sa dove cercare i file CSS, quindi dobbiamo configurare il file angular.json
-      in styles aggiungendo il percorso del file CSS di bootstrap, in questo caso node_modules/bootstrap/dist/css/bootstrap.min.css
-      "styles": [
-        "src/styles.css",
-        "node_modules/bootstrap/dist/css/bootstrap.min.css"
-      ],
-     -->
+    <div class="flex gap-3">
+      <button
+        class="btn"
+        (click)="alert = {msg: 'hello 1', type: 'primary'}"
+      >primary</button>
+      <button
+        class="btn"
+        (click)="alert = {msg: 'hello 2', type: 'danger'}"
+      >danger</button>
+      <button
+        class="btn"
+        (click)="alert = {msg: 'hello 3', type: 'success'}"
+      >success</button>
+    </div>
 
   `,
 
   styles: `  /* la regola css non viene inserita in un array con parentesi quadre */
+
+.btn {
+      @apply bg-sky-600 px-3 py-1 rounded-xl text-white
+    }
+
+    .alert {
+      @apply border-4 border-black rounded-xl p-5 my-3
+    }
+
+    .alert-primary {
+      @apply bg-sky-600 text-white
+
+    }
+
+    .alert-danger {
+      @apply bg-red-600 text-white
+    }
+
+    .alert-success {
+      @apply bg-green-200 text-black
+    }
 
   `,
 })
@@ -60,17 +75,9 @@ export class AppComponent {
   }
 
 
+
+
   /*
-    TYPED VERSION
-
-    una soluzione alternativa in cui l'oggetto alert è tipizzato al type custom che abbiamo chiamato Alert.
-
-    Il vantaggio di questo approccio è che, grazie alla Union Type
-    type: 'primary' | 'danger' | 'success'
-    non sarà possibile inserire degli alert type con stringhe errate.
-
-    Ad esempio, il seguente codice restituirebbe un'eccezione a compile time, perché xyz non è un valore valido per la proprietà type:
-
-    alert = { msg: 'hello', type: 'xyz' }*/
+   */
 
 }
