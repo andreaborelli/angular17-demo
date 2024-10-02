@@ -1,3 +1,4 @@
+import { Position } from './../../node_modules/@angular-devkit/build-angular/node_modules/postcss/lib/node.d';
 import { Component } from '@angular/core';
 import { NgClass } from '@angular/common';
 
@@ -17,35 +18,23 @@ type Alert = {
 
   <div class="centered-page sm flex flex-col gap-3">
 
-        <h1 class="page-title">Alert Example</h1>
+    <button
+      class="btn"
+      (mouseover)="show($event)"
+      (mouseout)="hide()"
+      (mousemove)="move()"
+      >Click Me</button>
 
-        <div
-          class="alert"
-          [ngClass]="{
-            'alert-info': alert.type === 'primary',
-            'alert-error': alert.type === 'danger',
-            'alert-success': alert.type === 'success'
-          }"
-        >
-            {{ alert.msg }} - {{alert.type}}
-        </div>
+      <div>{{position?.x}} - {{position?.y}}</div>
 
-        <div class="flex gap-3">
-          <button
-            class="btn"
-            (click)="alert = {msg: 'hello 1', type: 'primary'}">primary</button>
-          <button
-            class="btn"
-            (click)="alert = {msg: 'hello 2', type: 'danger'}">danger</button>
-          <button
-            class="btn"
-            (click)="alert = {msg: 'hello 3', type: 'success'}">success</button>
-        </div>
-
-        <input type="text" placeholder="Type here"/>
-
-    <h4>Guida Angular / Daisy UI and Tailwind</h4>
-    <a href="https://daisyui.com/">https://daisyui.com/</a>
+      <div
+        class="absolute bg-black text-white p-3 rounded-xl pointer-events-none"
+        [style.left.px]="position?.x"
+        [style.top.px]="position?.y"
+        [hidden]="!position"
+      >
+        TOOLTIP
+      </div>
 
 </div>
 
@@ -57,12 +46,30 @@ type Alert = {
 })
 export class AppComponent {
 
-  alert: Alert = {
-    msg: 'hello',
-    type: 'primary' // tipo di classe css che voglio applicare
+  position: Coords | null = null;
+
+  show(event: MouseEvent) {
+    console.log('show', event.clientX, event.clientY);
+    this.position = {
+      x: event.clientX + 10,
+      y: event.clientY + 10
+    }
   }
 
-  /*
-   */
+  hide() {
+    console.log('hide');
+    this.position = null;
+  }
 
+  move() {
+    console.log('move');
+  }
+
+
+}
+
+export type Coords = {
+
+  x: number;
+  y: number;
 }
