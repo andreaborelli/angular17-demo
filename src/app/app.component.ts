@@ -14,56 +14,43 @@ type Alert = {
   ],
   template: `
     <!-- Tailwind CSS -->
+
+  <div class="centered-page sm flex flex-col gap-3">
+
+      <h1 class="page-title">Alert Example</h1>
     <div
-      class="alert"
-      [ngClass]="{
-        'alert-primary': alert.type === 'primary',
-        'alert-danger': alert.type === 'danger',
-        'alert-success': alert.type === 'success',
-      }"
-    >
-        {{ alert.msg }}
+        class="alert"
+        [ngClass]="{
+          'alert-primary': alert.type === 'primary',
+          'alert-danger': alert.type === 'danger',
+          'alert-success': alert.type === 'success'
+        }"
+      >
+          {{ alert.msg }} - {{alert.type}}
     </div>
 
-    <div class="flex gap-3">
-      <button
-        class="btn"
-        (click)="alert = {msg: 'hello 1', type: 'primary'}"
-      >primary</button>
-      <button
-        class="btn"
-        (click)="alert = {msg: 'hello 2', type: 'danger'}"
-      >danger</button>
-      <button
-        class="btn"
-        (click)="alert = {msg: 'hello 3', type: 'success'}"
-      >success</button>
-    </div>
+      <div class="flex gap-3">
+        <button
+          class="btn"
+          (click)="alert = {msg: 'hello 1', type: 'primary'}">primary</button>
+        <button
+          class="btn"
+          (click)="alert = {msg: 'hello 2', type: 'danger'}">danger</button>
+        <button
+          class="btn"
+          (click)="alert = {msg: 'hello 3', type: 'success'}">success</button>
+      </div>
+
+    <input type="text">
+
+    <h4>Guida Angular / Tailwind:</h4>
+    <a href="https://tailwindcss.com/docs/guides/angular">https://tailwindcss.com/docs/guides/angular</a>
+
+</div>
 
   `,
 
   styles: `  /* la regola css non viene inserita in un array con parentesi quadre */
-
-.btn {
-      @apply bg-sky-600 px-3 py-1 rounded-xl text-white
-    }
-
-    .alert {
-      @apply border-4 border-black rounded-xl p-5 my-3
-    }
-
-    .alert-primary {
-      @apply bg-sky-600 text-white
-
-    }
-
-    .alert-danger {
-      @apply bg-red-600 text-white
-    }
-
-    .alert-success {
-      @apply bg-green-200 text-black
-    }
 
   `,
 })
@@ -73,9 +60,6 @@ export class AppComponent {
     msg: 'hello',
     type: 'primary' // tipo di classe css che voglio applicare
   }
-
-
-
 
   /*
    */
