@@ -17,34 +17,35 @@ type Alert = {
 
   <div class="centered-page sm flex flex-col gap-3">
 
-      <h1 class="page-title">Alert Example</h1>
-    <div
-        class="alert"
-        [ngClass]="{
-          'alert-primary': alert.type === 'primary',
-          'alert-danger': alert.type === 'danger',
-          'alert-success': alert.type === 'success'
-        }"
-      >
-          {{ alert.msg }} - {{alert.type}}
-    </div>
+        <h1 class="page-title">Alert Example</h1>
 
-      <div class="flex gap-3">
-        <button
-          class="btn"
-          (click)="alert = {msg: 'hello 1', type: 'primary'}">primary</button>
-        <button
-          class="btn"
-          (click)="alert = {msg: 'hello 2', type: 'danger'}">danger</button>
-        <button
-          class="btn"
-          (click)="alert = {msg: 'hello 3', type: 'success'}">success</button>
-      </div>
+        <div
+          class="alert"
+          [ngClass]="{
+            'alert-info': alert.type === 'primary',
+            'alert-error': alert.type === 'danger',
+            'alert-success': alert.type === 'success'
+          }"
+        >
+            {{ alert.msg }} - {{alert.type}}
+        </div>
 
-    <input type="text">
+        <div class="flex gap-3">
+          <button
+            class="btn"
+            (click)="alert = {msg: 'hello 1', type: 'primary'}">primary</button>
+          <button
+            class="btn"
+            (click)="alert = {msg: 'hello 2', type: 'danger'}">danger</button>
+          <button
+            class="btn"
+            (click)="alert = {msg: 'hello 3', type: 'success'}">success</button>
+        </div>
 
-    <h4>Guida Angular / Tailwind:</h4>
-    <a href="https://tailwindcss.com/docs/guides/angular">https://tailwindcss.com/docs/guides/angular</a>
+        <input type="text" placeholder="Type here"/>
+
+    <h4>Guida Angular / Daisy UI and Tailwind</h4>
+    <a href="https://daisyui.com/">https://daisyui.com/</a>
 
 </div>
 
