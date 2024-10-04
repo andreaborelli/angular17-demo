@@ -46,8 +46,12 @@ export class AppComponent {
   keydownHandler() {
 
     const text = this.myInput?.nativeElement.value; // event.target è un elemento html
-
     console.log(this.myInput?.nativeElement.value);
+
+      // alternativa all'uso dell'if
+    //const urlRegex = /^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/i;
+    //const isUrlValid = text && urlRegex.test(text)
+
     if (text) {
       const urlRegex = /^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/i;
       const isUrlValid = urlRegex.test(text) // se text è definito(true) e la regex è valida
