@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild,  } from '@angular/core';
 import { NgClass } from '@angular/common';
 
 type Alert = {
@@ -14,11 +14,13 @@ type Alert = {
   ],
   template: `
 
-        <!-- Keyboard events TemplateReference variable -->
+        <!-- ViewChild and Template Reference Variables -->
 
   <div class="centered-page sm flex flex-col gap-3">
 
-    <input type="text" (keydown.enter)="keyboardHandler(input)" #input placeholder="URL">
+    <input type="text" (keydown.enter)="keydownHandler()" #input placeholder="URL">
+
+    <button (click)="read()">READ VALUE</button>
 
   </div>
 
@@ -30,16 +32,35 @@ type Alert = {
 })
 export class AppComponent {
 
-  keyboardHandler(input: HTMLInputElement ) { // event: KeyboardEvent è un tipo di dato
+  @ViewChild('input') myInput: ElementRef<HTMLInputElement> | undefined; // riferimento #input
+  /* @ViewChild è un decoratore che permette di accedere a un elemento html,
+  in questo caso leggere il valore del campo di input, senza passare da una funzione */
 
-    const text = input.value; // event.target è un elemento html
-    console.log(input.value);
-    const urlRegex = /^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/i;
-    const isUrlValid = urlRegex.test(text)
+  constructor(){
+    setTimeout(() => {
+      console.log(this.myInput?.nativeElement.value);
+      this.myInput?.nativeElement.focus();
+    }, 2000)
+  }
 
-    if (isUrlValid) { // event.key è una stringa
-      window.open(text);
+  keydownHandler() {
+
+    const text = this.myInput?.nativeElement.value; // event.target è un elemento html
+
+    console.log(this.myInput?.nativeElement.value);
+    if (text) {
+      const urlRegex = /^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/i;
+      const isUrlValid = urlRegex.test(text) // se text è definito(true) e la regex è valida
+
+      if (isUrlValid) { // event.key è una stringa
+        window.open(text);
+      }
     }
+
+  }
+
+  read() {
+    console.log(this.myInput?.nativeElement.value);
   }
 
 }
