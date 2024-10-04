@@ -14,11 +14,11 @@ type Alert = {
   ],
   template: `
 
-        <!-- Keyboard events -->
+        <!-- Keyboard events TemplateReference variable -->
 
   <div class="centered-page sm flex flex-col gap-3">
 
-    <input type="text" (keydown.enter)="keyboardHandler($event)" placeholder="URL">
+    <input type="text" (keydown.enter)="keyboardHandler(input)" #input placeholder="URL">
 
   </div>
 
@@ -30,14 +30,14 @@ type Alert = {
 })
 export class AppComponent {
 
-  keyboardHandler(event: Event) { // event: KeyboardEvent è un tipo di dato
+  keyboardHandler(input: HTMLInputElement ) { // event: KeyboardEvent è un tipo di dato
 
-    const text = (event.target as HTMLInputElement).value; // event.target è un elemento html
+    const text = input.value; // event.target è un elemento html
+    console.log(input.value);
     const urlRegex = /^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/i;
     const isUrlValid = urlRegex.test(text)
 
     if (isUrlValid) { // event.key è una stringa
-
       window.open(text);
     }
   }
