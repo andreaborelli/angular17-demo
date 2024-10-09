@@ -1,5 +1,5 @@
-import { AfterViewInit, Component, ElementRef, ViewChild,  } from '@angular/core';
-import { NgClass } from '@angular/common';
+import { Component } from '@angular/core';
+import { DatePipe, DecimalPipe, JsonPipe } from '@angular/common';
 
 type Alert = {
   msg: string;
@@ -10,17 +10,26 @@ type Alert = {
   selector: 'app-root',
   standalone: true,
   imports: [
-    NgClass
+    DatePipe, // dichiaro il pipe per utilizzarlo
+    DecimalPipe,
+    JsonPipe
   ],
   template: `
 
-        <!-- ViewChild and Template Reference Variables -->
+        <!-- Pipes | : buit-in sono dei formatter di dati  -->
 
   <div class="centered-page sm flex flex-col gap-3">
 
-    <input type="text" (keydown.enter)="keydownHandler()" #input placeholder="URL">
+  <div>Date 1 - {{today | date: 'dd-MM-yyyy'}}</div> <!-- date nome de selector del pipe -->
+  <div>Date 2 - {{timestamp | date: 'hh:mm:ss'}}</div> <!-- formattazione di default -->
 
-    <button (click)="read()">READ VALUE</button>
+  <div>{{value | number: '1.2-4'}}</div> <!-- number: '1.2-4' 1 numero intero,
+                                                              2 numero di decimali,
+                                                              3 numero minimo di cifre,
+                                                              4 numero massimo di cifre -->
+
+<pre>{{user | json}}</pre> <!-- json: formatta l'oggetto in json; una sorta di JSON stringify -->
+<pre>{{users | json}}</pre>
 
   </div>
 
@@ -30,44 +39,13 @@ type Alert = {
 
   `,
 })
-export class AppComponent implements AfterViewInit {
+export class AppComponent {
 
-  /* AfterViewInit: è un metodo che viene automaticamente invocato in ogni componente quando il template è pronto  */
+  today = new Date();
+  timestamp = 1702423006;
+  value = 1.232848327489237
+  user = { name: 'Andrea', surname: 'Borelli' }
+  users = [{ name: 'Andrea', surname: 'Borelli' }, { name: 'Andrea', surname: 'Borelli' }]
 
-  @ViewChild('input') myInput: ElementRef<HTMLInputElement> | undefined;
-
-  // constructor(){
-   //  setTimeout(() => {
-   /* utlizzo di setTimeout perchè il campo di input non è disponibile ancora nel costruttore,
-      ma deve aspettare un evento del ciclo di vita del componente, che indicherà che il template e renderizzato,
-      e possiamo accedere in maniera sicura agli elementi della pagina*/
-      //console.log(this.myInput);
-    // })
- // }
-
-  ngAfterViewInit() { // metodo che viene invocato automaticamente quando il template è pronto
-    this.myInput?.nativeElement.value;
-  }
-
-  keydownHandler() {
-    const text = this.myInput?.nativeElement.value; // event.target è un elemento html
-    console.log(this.myInput?.nativeElement.value);
-      // alternativa all'uso dell'if
-    //const urlRegex = /^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/i;
-    //const isUrlValid = text && urlRegex.test(text)
-    if (text) {
-      const urlRegex = /^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/i;
-      const isUrlValid = urlRegex.test(text) // se text è definito(true) e la regex è valida
-
-      if (isUrlValid) { // event.key è una stringa
-        window.open(text);
-      }
-    }
-
-  }
-
-  read() {
-    console.log(this.myInput?.nativeElement.value);
-  }
 
 }
