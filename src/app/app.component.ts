@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild,  } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, ViewChild,  } from '@angular/core';
 import { NgClass } from '@angular/common';
 
 type Alert = {
@@ -30,28 +30,31 @@ type Alert = {
 
   `,
 })
-export class AppComponent {
+export class AppComponent implements AfterViewInit {
 
-  @ViewChild('input') myInput: ElementRef<HTMLInputElement> | undefined; // riferimento #input
-  /* @ViewChild è un decoratore che permette di accedere a un elemento html,
-  in questo caso leggere il valore del campo di input, senza passare da una funzione */
+  /* AfterViewInit: è un metodo che viene automaticamente invocato in ogni componente quando il template è pronto  */
 
-  constructor(){
-    setTimeout(() => {
-      console.log(this.myInput?.nativeElement.value);
-      this.myInput?.nativeElement.focus();
-    }, 2000)
+  @ViewChild('input') myInput: ElementRef<HTMLInputElement> | undefined;
+
+  // constructor(){
+   //  setTimeout(() => {
+   /* utlizzo di setTimeout perchè il campo di input non è disponibile ancora nel costruttore,
+      ma deve aspettare un evento del ciclo di vita del componente, che indicherà che il template e renderizzato,
+      e possiamo accedere in maniera sicura agli elementi della pagina*/
+      //console.log(this.myInput);
+    // })
+ // }
+
+  ngAfterViewInit() { // metodo che viene invocato automaticamente quando il template è pronto
+    this.myInput?.nativeElement.value;
   }
 
   keydownHandler() {
-
     const text = this.myInput?.nativeElement.value; // event.target è un elemento html
     console.log(this.myInput?.nativeElement.value);
-
       // alternativa all'uso dell'if
     //const urlRegex = /^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/i;
     //const isUrlValid = text && urlRegex.test(text)
-
     if (text) {
       const urlRegex = /^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/i;
       const isUrlValid = urlRegex.test(text) // se text è definito(true) e la regex è valida
