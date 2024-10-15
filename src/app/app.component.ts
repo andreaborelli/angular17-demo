@@ -1,5 +1,6 @@
+import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { DatePipe, DecimalPipe, JsonPipe } from '@angular/common';
+// import { DatePipe, DecimalPipe, JsonPipe, NgClass, NgStyle } from '@angular/common';
 
 type Alert = {
   msg: string;
@@ -10,9 +11,16 @@ type Alert = {
   selector: 'app-root',
   standalone: true,
   imports: [
-    DatePipe, // dichiaro il pipe per utilizzarlo
-    DecimalPipe,
-    JsonPipe
+    CommonModule, // dichiaro il modulo per utilizzarlo
+    // DatePipe, // dichiaro il pipe per utilizzarlo
+    // DecimalPipe,
+    // JsonPipe,
+    // NgClass,
+    // NgStyle
+    /* tutti questi pipe sono già dichiarati nel modulo CommonModule,
+    queste direttive fanno parte di un gruppo chiamato modulo: che è un agglomerato gruppo di funzionalità
+    che possono essere: direttive, componenti, pipe, servizi, ecc... che vengono dichiarati in un modulo chiamato
+    CommonModule. */
   ],
   template: `
 
