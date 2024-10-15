@@ -47,7 +47,8 @@
               "zone.js"
             ],
             "tsConfig": "tsconfig.app.json",
-            "assets": [
+            "assets": [ // stabiliamo quale cartella dovrà essere inserita nella build,
+            //eventualmente possiamo anche aggiungere delle nostre cartelle: nodo architect build
               "src/favicon.ico",
               "src/assets"
             ],
