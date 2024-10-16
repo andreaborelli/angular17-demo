@@ -15,22 +15,21 @@ type Alert = {
   ],
   template: `
 
+    <!-- come distruggere e creare elementi dal DOM utilizzando la direttiva NGIF   -->
 
-  <div class="centered-page sm">
+    <div class="centered-page sm">
+      <button class="btn" (click)="visible = !visible">Click</button>
+      <h1 class="text-3xl" *ngIf="visible">Hello</h1>
+      <!-- *ngIf è una direttiva strutturale che permette di distruggere e creare elementi dal DOM -->
 
-    <img [src]="url" alt="">
+      <!-- quando la proprietà visible sarà true l'elemento sarà renderizzato, altrimenti sarà distrutto -->
 
-  </div>
+         <!-- <h1 class="text-3xl" [hidden]="!visible">Hello</h1> -->
+         <!-- l'attributo hidden è un modo per nascondere un elemento dal DOM, ma non lo distrugge -->
 
-  <br>
+    </div>
 
-  <div class="centered-page sm">
 
-    <button (click)="url = 'assets/images/react.png'">Load React</button>
-    <br>
-    <button (click)="url = 'assets/images/js.png'">Load JS</button>
-    <!-- immagini automaticamente nella build caricate da assets/images -->
-  </div>
   `,
 
   styles: `  /* la regola css non viene inserita in un array con parentesi quadre */
@@ -39,7 +38,7 @@ type Alert = {
 })
 export class AppComponent {
 
-  url = "assets/images/angular.png"
+  visible = false; // true fa vedere eleimento, false lo nasconde di default
 
 
 
