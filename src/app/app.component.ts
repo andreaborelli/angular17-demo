@@ -2,51 +2,35 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 // import { DatePipe, DecimalPipe, JsonPipe, NgClass, NgStyle } from '@angular/common';
 
-type Product = {
-  id: number;
-  name: string;
-  cost: number;
-}
-
 
 @Component({
   selector: 'app-root',
   standalone: true,
   imports: [
-    CommonModule
+    CommonModule // CommonModule è un modulo che contiene le direttive di base di Angular, come *ngIf, *ngFor, ecc.
   ],
   template: `
 
 
-    <!-- come renderizzare una lista di elementi acquisiti da un array es. di prodotti -->
+    <!-- come generare dei menu dinamicamente utilizzando ngFor e ngSwitch insieme -->
 
-    <div class="centered-page sm">
+<div class="centered-page sm">
 
-    <button class="btn" (click)="section = 'home'">Home</button>
-    <button class="btn" (click)="section = 'step1'">Step 1</button>
-    <button class="btn" (click)="section = 'step2'">Step 2</button>
-    <button class="btn" (click)="section = 'final'">Final</button>
+    <button *ngFor="let item of menuItems" class="btn" (click)="section = item.section">{{item.label}}</button>
+    <!-- 2. utilizzo ngFor per ciclare l'array di oggetti e generare un bottone per ogni oggetto.
+     3. al click del bottone assegno alla variabile section il valore della proprietà section dell'oggetto. -->
+
     <hr>
-  <div [ngSwitch]="section"> <!-- ngSwitch è una direttiva che permette di fare un controllo su una variabile
-                                  e in base al suo valore renderizza un blocco di codice o un altro -->
-    <div *ngSwitchCase = "'home'">Home</div> <!-- *ngSwitchCase che accetta un'espressione,
-                                                  per questo passiamo la stringa tra apicetti,
-                                                  potrebbe essere anche una variabile -->
+
+  <div [ngSwitch]="section">
+    <div *ngSwitchCase = "'home'">Home</div>
     <div *ngSwitchCase = "'step1'">Step 1</div>
     <div *ngSwitchCase = "'step2'">Step 2</div>
     <div *ngSwitchCase = "'final'">Final</div>
-    <div *ngSwitchDefault>Select a button</div> <!-- *ngSwitchDefault è un blocco di codice che viene renderizzato
-                              quando nessun *ngSwitchCase è soddisfatto -->
-      <!-- <div *ngIf="section === 'home'">Home</div>
-      <div *ngIf="section === 'step1'">Step 1</div>
-      <div *ngIf="section === 'step2'">Step 2</div>
-      <div *ngIf="section === 'final'">Final</div> -->
-
-          <!-- tanti if che fanno un contollo sulla stessa variabile e bene usare ngSwitch -->
-
+    <div *ngSwitchDefault>Select a button</div>
   </div>
-    </div>
 
+</div>
 
   `,
 
@@ -56,6 +40,25 @@ type Product = {
 })
 export class AppComponent {
 
- section: 'home' | 'step1' | 'step2' | 'final'| null = null;
+
+ section: Section = null; // 5. definisco una variabile di tipo Section e la inizializzo a null
+
+ menuItems: MenuItems[] = [ // 1. definisco un array di oggetti con due proprietà
+  {section: 'home', label: 'Home'},
+  {section: 'step1', label: 'Step 1'},
+  {section: 'step2', label: 'Step 2'},
+  {section: 'final', label: 'Final'},
+ ]
+
+// 4. tipizzazione degli oggetti
 
 }
+
+/* la tipizzazione degli oggetti va messa fuori dalla classe es. AppComponent,
+oppure e consigliato creare un file app.models.ts e importarlo */
+type MenuItems = {
+  section: Section;
+  label: string;
+}
+
+type Section = 'home' | 'step1' | 'step2' | 'final'| null; // 6. definisco un tipo Section con i valori possibili e null
