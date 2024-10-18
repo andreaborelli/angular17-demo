@@ -1,29 +1,26 @@
-import { CommonModule } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
-import { Component, inject, input, signal } from '@angular/core';
-// import { DatePipe, DecimalPipe, JsonPipe, NgClass, NgStyle } from '@angular/common';
+import { Component, signal } from '@angular/core';
+import { ListComponent } from './shared/list/list.component';
 
 
 @Component({
   selector: 'app-root',
   standalone: true,
   imports: [
-    CommonModule // CommonModule è un modulo che contiene le direttive di base di Angular, come *ngIf, *ngFor, ecc.
+    ListComponent
   ],
   template: `
 
-    <!-- Angular Dev Tools - Profiler - Analisi Change Detection -->
+    <!-- Angular Dev Tools - Components -->
 
-     <button (click)="doSomething()">toggle</button>
-    <input type="text" (keydown)="doSomething()">
+ <button (click)="toggle()">toggle</button>
 
-<br>
+    @if(visible()) {
+      <app-list />
+    }
 
     <a href="https://chromewebstore.google.com/detail/angular-devtools/ienfalfjdbdpebioblfackkekamfmbnh"
        target="_blank" rel="noopener noreferrer">Angular Dev Tools - Chrome Extension</a>
 
-       <button (click)="load()">load</button>
-       {{items()}}
   `,
 
   styles: `  /* la regola css non viene inserita in un array con parentesi quadre */
@@ -32,29 +29,12 @@ import { Component, inject, input, signal } from '@angular/core';
 })
 export class AppComponent {
 
+  visible = signal(false)
 
-
-  doSomething() {
-
+  toggle() {
+    this.visible.update(v => !v)
   }
 
-  constructor() {
-    setInterval(() => {
-
-    }, 1000)
-  }
-
-
-
-  http = inject(HttpClient);
-  items = signal<any[]>([])
-
-  load() {
-    this.http.get<any[]>('https://jsonplaceholder.typicode.com/users')
-      .subscribe(res => {
-        this.items.set(res)
-      })
-  }
 
 }
 
