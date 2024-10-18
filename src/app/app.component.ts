@@ -11,26 +11,26 @@ import { Component } from '@angular/core';
   ],
   template: `
 
+    <!-- come creare una nimi gallery di immagini -->
 
-    <!-- come generare dei menu dinamicamente utilizzando ngFor e ngSwitch insieme -->
+      <div class="centered-page sm flex flex-col gap-3 items-center">
+          <h1 class="text-3xl">{{ product.name }} {{ product.images[currentIndex].label }}</h1>
 
-<div class="centered-page sm">
+        <div class="flex gap-3 items-center w-full">
 
-    <button *ngFor="let item of menuItems" class="btn" (click)="section = item.section">{{item.label}}</button>
-    <!-- 2. utilizzo ngFor per ciclare l'array di oggetti e generare un bottone per ogni oggetto.
-     3. al click del bottone assegno alla variabile section il valore della proprietà section dell'oggetto. -->
+          <button class="btn" (click)="prev()">prev</button>
+            <img
+              [src]="product.images[currentIndex].path"
+              [alt]="product.images[currentIndex].label"
+              class="w-64"
+              >
+          <button class="btn" (click)="next()">next</button>
 
-    <hr>
+        </div>
 
-  <div [ngSwitch]="section">
-    <div *ngSwitchCase = "'home'">Home</div>
-    <div *ngSwitchCase = "'step1'">Step 1</div>
-    <div *ngSwitchCase = "'step2'">Step 2</div>
-    <div *ngSwitchCase = "'final'">Final</div>
-    <div *ngSwitchDefault>Select a button</div>
-  </div>
+          <div>{{ product.website }}</div>
 
-</div>
+      </div>
 
   `,
 
@@ -40,25 +40,29 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
 
+  currentIndex = 0;
 
- section: Section = null; // 5. definisco una variabile di tipo Section e la inizializzo a null
+  product = {
+    name: "T-Shirt",
+    images: [
+      { path: "assets/images/angular.png", label: "Angular" },
+      { path: "assets/images/react.png", label: "React" },
+      { path: "assets/images/js.png", label: "JS" }
+    ],
+    website: "https://www.fabiobiondi.dev",
+  }
 
- menuItems: MenuItems[] = [ // 1. definisco un array di oggetti con due proprietà
-  {section: 'home', label: 'Home'},
-  {section: 'step1', label: 'Step 1'},
-  {section: 'step2', label: 'Step 2'},
-  {section: 'final', label: 'Final'},
- ]
+  prev() {
+    this.currentIndex = this.currentIndex > 0 ?
+      this.currentIndex - 1 : this.product.images.length - 1; // se currentIndex è maggiore di 0 allora decrementa altrimenti assegna la lunghezza dell'array - 1
 
-// 4. tipizzazione degli oggetti
+  }
+  next() {
+    this.currentIndex = this.currentIndex < this.product.images.length - 1 ?
+      this.currentIndex + 1 : 0; // se currentIndex è minore della lunghezza dell'array - 1 allora incrementa altrimenti assegna 0
+
+  }
 
 }
 
-/* la tipizzazione degli oggetti va messa fuori dalla classe es. AppComponent,
-oppure e consigliato creare un file app.models.ts e importarlo */
-type MenuItems = {
-  section: Section;
-  label: string;
-}
 
-type Section = 'home' | 'step1' | 'step2' | 'final'| null; // 6. definisco un tipo Section con i valori possibili e null
