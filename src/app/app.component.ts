@@ -11,7 +11,10 @@ import { Component, input } from '@angular/core';
   ],
   template: `
 
-    <!-- creare to do list add, remove, e toggle: completare o meno un todo -->
+    <!-- creare to do list applicando il concetto di IMMUTABILITY,
+     ovvero non modificare l'array originale ma creare un nuovo array con i nuovi valori,
+     ogni qualvolta che effettuiamo una modifica,
+     questo ci permetterà di ottimizzare i render e quindi ridurli al fine di ottenere maggiori prestazioni -->
 
     <!-- #template reference variable, ci permette di accedere all'elemento del DOM -->
 
@@ -59,30 +62,36 @@ export class AppComponent {
     { id: 3, title: 'Todo 3', completed: true },
   ]
 
-  removeTodo(id:  number) {
-    console.log('remove', id);
-    const index = this.todos.findIndex(todo => todo.id === id); // dobbiamo trovare l'index dell'elemento che vogliamo rimuovere
-    this.todos.splice(index, 1); // rimuoviamo l'elemento dall'array
-
-    /* this.todos.splice(1, 1); /* si riferisce all'indice 1 che si riferisce al secondo elemento dell'array, visto che partono da zero
-                              il secondo parametro si riferisce a quanti elementi da quell' index vogliamo rimuovere */
-  }
-
-  toggleTodo(id: number) {
-    const index = this.todos.findIndex(todo => todo.id === id);
-    this.todos[index].completed = !this.todos[index].completed; // invertiamo il valore di completed (true/false) con il punto esclamativo davanti a this.todos[index].completed
-  }
-
   addTodo(input: HTMLInputElement) { // input è un parametro di tipo HTMLInputElement
     const newTodo: Todo = {
       id: Date.now(), // non avendo un database, possiamo usare Date.now() per avere un id univoco
       title: input.value, // prendiamo il valore dell'input
       completed: false // di default il todo non è completato
     }
-    this.todos.push(newTodo); // aggiungiamo il nuovo todo all'array
+    // this.todos.push(newTodo); // aggiungiamo il nuovo todo all'array
+
+    this.todos = [...this.todos, newTodo]; // WITH IMMUTABILITY creiamo un nuovo array con tutti i vecchi todo e aggiungiamo il nuovo todo
     input.value = ''; // per svuotare l'input dopo aver aggiunto un todo
   }
 
+  removeTodo(id:  number) {
+    // console.log('remove', id);
+    // const index = this.todos.findIndex(todo => todo.id === id); // dobbiamo trovare l'index dell'elemento che vogliamo rimuovere
+    //this.todos.splice(index, 1); // rimuoviamo l'elemento dall'array
+    this.todos = this.todos.filter(todo => todo.id !== id); // WITH IMMUTABILITY con l'immutabilità creiamo un nuovo array con tutti i todo tranne quello che vogliamo rimuovere eccetto quello che vogliamo rimuovere
+
+    /* this.todos.splice(1, 1); /* si riferisce all'indice 1 che si riferisce al secondo elemento dell'array, visto che partono da zero
+                              il secondo parametro si riferisce a quanti elementi da quell' index vogliamo rimuovere */
+  }
+
+  toggleTodo(id: number) {
+    // const index = this.todos.findIndex(todo => todo.id === id);
+    // this.todos[index].completed = !this.todos[index].completed; // invertiamo il valore di completed (true/false) con il punto esclamativo davanti a this.todos[index].completed
+    this.todos = this.todos.map(todo => {
+     return todo.id === id ? { ...todo, completed: !todo.completed } : todo; // WITH IMMUTABILITY con l'immutabilità creiamo un nuovo array con tutti i todo tranne quello che vogliamo modificare
+    })
+  }
+  //...todo clone l'oggetto todo e poi sovrascrive il valore di completed
 
   saveAll() {
     console.log(this.todos)
