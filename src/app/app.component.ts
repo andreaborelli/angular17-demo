@@ -106,4 +106,25 @@ type Todo = {
   completed: boolean;
 }
 
+/* Nota: Nell'esempio precedente è possibile creare un nuovo TODO vuoto,
+senza alcun testo. Possiamo evitare questo comportamento semplicemente
+aggiungendo un controllo di validazione, come mostrato nell'esempio seguente:
+
+
+
+  addTodo(input: HTMLInputElement) {
+    // verifica se input è vuoto
+    if (!input.value) return;
+
+    // oppure
+
+    // verifica che non ci siano spazi vuoti
+    if (!input.value.trim()) {
+
+
+    // ....
+  }
+
+
+*/
 
