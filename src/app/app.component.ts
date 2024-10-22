@@ -10,16 +10,20 @@ import { ListComponent } from './shared/list/list.component';
   ],
   template: `
 
-    <!-- Angular Dev Tools - Components -->
+    <!-- Signal: set e update -->
 
- <button (click)="toggle()">toggle</button>
+    <div class="centered sm p-10">
 
-    @if(visible()) {
-      <app-list />
-    }
+         <h1 class="page-title">Counter Demo with Signal</h1>
 
-    <a href="https://chromewebstore.google.com/detail/angular-devtools/ienfalfjdbdpebioblfackkekamfmbnh"
-       target="_blank" rel="noopener noreferrer">Angular Dev Tools - Chrome Extension</a>
+         <button class="btn" (click)="dec()">-</button>
+         <span class="text-2xl">{{ counter() }}</span> <!-- usare un getter con () per ottenere il valore del signal -->
+         <button class="btn" (click)="inc()">+</button>
+
+         <button class="btn" (click)="reset()">reset</button>
+
+
+    </div>
 
   `,
 
@@ -29,12 +33,54 @@ import { ListComponent } from './shared/list/list.component';
 })
 export class AppComponent {
 
-  visible = signal(false)
+  counter = signal(0); /* con signal iniziali il counter a 0,
+                          in automatico counter viene inizializzato
+                          come un WritableSignal<number> grazie all'inferenza */
+  // dec() {
+  //   this.counter.update(c => {
+  //     console.log(c);
+  //     return c - 1
+  //   });
+  // }
 
-  toggle() {
-    this.visible.update(v => !v)
+
+  dec() {
+    this.counter.update(c => c - 1); /* update è un metodo di WritableSignal che permette di aggiornare il valore del signal */
+  }
+  // uso c iniziale della proprietà counter, per rappresentare la variabile all'interno della funzione per renderlo più coinciso, tanto se siamo all'interno della funzione del signal sappiamo che stiamo lavorando sul counter
+
+
+  inc() {
+    this.counter.update(c => c + 1);
   }
 
+  reset() {
+    this.counter.set(0); /* usiamo set perchè il valore da aggiornare non dipende da quello precedente */
+  }
+
+/* => è una arrow function, che è una funzione anonima, che non ha un nome,
+e che non ha un this, quindi non ha un contesto, quindi non ha un this,
+quindi non ha un prototype, quindi non ha un costruttore, quindi non ha un arguments,
+quindi non ha un caller, quindi non ha un length, quindi non ha un name */
+
+
+  // senza signal
+
+  // counter = 0;
+
+  // dec() {
+  //   this.counter--;
+  // }
+
+  // inc() {
+  //   this.counter++;
+  // }
+
+  // reset() {
+  //   this.counter = 0;
+  // }
+
+  // viene triggherata la change detection, che vuol dire che viene aggiornato il DOM
 
 }
 
