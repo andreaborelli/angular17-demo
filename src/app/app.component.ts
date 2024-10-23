@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, effect, signal } from '@angular/core';
 import { ListComponent } from './shared/list/list.component';
 
 
@@ -42,6 +42,17 @@ export class AppComponent {
   //     return c - 1
   //   });
   // }
+
+      constructor() {  /* effect: è una funzione che permette di avviare una azione
+                                  ogni volta che viene aggiornato il signal */
+        effect(() => { // effect si attiva ogni volta che il signal viene aggiornato
+          console.log('action', this.counter()); /* la funzione effect viene invocata ogni qual volta aggiorniamo il signal
+                                                    semplicemente usando il signal al suo interno: this.counter() è rappresenta una dipendenza dell'effect
+                                chiave              quindi ogni signal che usiamo dentro effect comporterà l'esecuzione della funzione al suo interno */
+          localStorage.setItem('counter', JSON.stringify(this.counter())); /* salviamo il valore del counter in localStorage, con un approccio totalmente reattivo */
+        });
+
+      }
 
 
   dec() {
