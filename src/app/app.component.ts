@@ -1,12 +1,14 @@
 import { Component, effect, signal } from '@angular/core';
 import { ListComponent } from './shared/list/list.component';
+import { CommonModule } from '@angular/common';
 
 
 @Component({
   selector: 'app-root',
   standalone: true,
   imports: [
-    ListComponent
+    ListComponent,
+    CommonModule
   ],
   template: `
 
@@ -16,11 +18,19 @@ import { ListComponent } from './shared/list/list.component';
 
          <h1 class="page-title">Counter Demo with Signal</h1>
 
+
          <button class="btn" (click)="dec()">-</button>
          <span class="text-2xl">{{ counter() }}</span> <!-- usare un getter con () per ottenere il valore del signal -->
          <button class="btn" (click)="inc()">+</button>
 
-         <button class="btn" (click)="reset()">reset</button>
+         <button class="btn"
+         (click)="reset()"
+         [style.display]="isZero() ? 'none' : 'inline'"
+         >reset
+        </button>
+
+        <div [hidden]="isZero()">Counter is zero</div>
+
 
 
     </div>
@@ -33,65 +43,76 @@ import { ListComponent } from './shared/list/list.component';
 })
 export class AppComponent {
 
-  counter = signal(0); /* con signal iniziali il counter a 0,
-                          in automatico counter viene inizializzato
-                          come un WritableSignal<number> grazie all'inferenza */
-  // dec() {
-  //   this.counter.update(c => {
-  //     console.log(c);
-  //     return c - 1
-  //   });
-  // }
+  counter = signal(0);
 
-      constructor() {  /* effect: è una funzione che permette di avviare una azione
-                                  ogni volta che viene aggiornato il signal */
-        effect(() => { // effect si attiva ogni volta che il signal viene aggiornato
-          console.log('action', this.counter()); /* la funzione effect viene invocata ogni qual volta aggiorniamo il signal
-                                                    semplicemente usando il signal al suo interno: this.counter() è rappresenta una dipendenza dell'effect
-                                chiave              quindi ogni signal che usiamo dentro effect comporterà l'esecuzione della funzione al suo interno */
-          localStorage.setItem('counter', JSON.stringify(this.counter())); /* salviamo il valore del counter in localStorage, con un approccio totalmente reattivo */
+
+      constructor() {
+        effect(() => {
+          console.log('action', this.counter());
+          localStorage.setItem('counter', JSON.stringify(this.counter()));
         });
 
       }
 
-
   dec() {
-    this.counter.update(c => c - 1); /* update è un metodo di WritableSignal che permette di aggiornare il valore del signal */
+    this.counter.update(c => c - 1);
   }
-  // uso c iniziale della proprietà counter, per rappresentare la variabile all'interno della funzione per renderlo più coinciso, tanto se siamo all'interno della funzione del signal sappiamo che stiamo lavorando sul counter
-
 
   inc() {
     this.counter.update(c => c + 1);
   }
 
   reset() {
-    this.counter.set(0); /* usiamo set perchè il valore da aggiornare non dipende da quello precedente */
+    this.counter.set(0);
   }
 
-/* => è una arrow function, che è una funzione anonima, che non ha un nome,
-e che non ha un this, quindi non ha un contesto, quindi non ha un this,
-quindi non ha un prototype, quindi non ha un costruttore, quindi non ha un arguments,
-quindi non ha un caller, quindi non ha un length, quindi non ha un name */
+  isZero() {
+    console.log('is zero')
+    return this.counter() === 0;
+  }
 
+/* Immaginiamo di voler visualizzare un messaggio counter is zero quando il contatore ovviamenete è zero,
+potremmo usare un banale ngIf che verifica il valore del counter sia uguale a zero,
+<div *ngIf="counter() === 0">Counter is zero</div> ovviemente tutto funzionerà,
+oppure si può utilizzare l'attributo hidden: <div [hidden]="counter() !== 0">Counter is zero</div>
+andando a nascondere l'elemento quando counter è diverso da zero e ininfluente.
+stessa cosa potremmo fare nel button che non ha senzo mostrare il pulsante reset se il counter è già a zero,
+potremmo visualizzarlo o meno con ngIf, display none: [style.display]="counter() === 0 ? 'none' : 'inline'"  */
 
-  // senza signal
+/* ora il problema che tali operazioni:
 
-  // counter = 0;
+<div [hidden]="counter() !== 0">Counter is zero</div> e
 
-  // dec() {
-  //   this.counter--;
-  // }
+[style.display]="counter() === 0 ? 'none' : 'inline'"
 
-  // inc() {
-  //   this.counter++;
-  // }
+  in     <button class="btn"
+         (click)="reset()"
+         [style.display]="counter() === 0 ? 'none' : 'inline'"
+         >reset
+        </button>
 
-  // reset() {
-  //   this.counter = 0;
-  // }
+  vengono eseguite troppe volte, ogni volta che viene triggherata la Change Detection
+  anche quando counter non viene effettivamente modificato,
+  per verificare, invece di scrivere le condizioni inline provare a spostare la condizione
+  in un metodo della classe isZero() { return this.counter() === 0; } questa funzione restituirà un booleano
+  è cambiamo il template per usare la funzione isZero() invece di scriverla inline.
+  ma se inseriamo un console.log('isZero') all'interno del metodo isZero()
+  vedremo che all'avvio dell'applicazione viene eseguito molte volte.
 
-  // viene triggherata la change detection, che vuol dire che viene aggiornato il DOM
+  più la nostra view è complessa più avremo di triggher per la Change Detection,
+  che se ne parlato nel video di Angular Dev Tool in cui si mostra come Angular trigghera la Change Detection
+  noi non abbiamo controllo su quel processo e viene eseguito ogni volta che abbiamo
+  eventi, chiamate al server, interval ecc. e alle volte questi vengono eseguiti non da noi,
+  ma se usiamo una funzionalità di angular come può essere ngClass e altre direttive,
+  ci sono dei triggher automatici dietro le quinte che la fanno scattare,
+  quindi maggiore sarà la complessità della view più avremo triggher di questi metodi
+  e più metodi avremo del genere del nostro componente, più la nostra applicazione soffrirà di performance,
+  ovvio non un'applicazione che ha un banale form di quattro campi e una lista, ma una view più complessa
+  ma è bene capire come funziona la Change Detection e come possiamo ottimizzarla.
+
+  i signal risolvono proprio questo problema con Computed Property
+
+  */
 
 }
 
