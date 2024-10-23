@@ -1,4 +1,4 @@
-import { Component, effect, signal } from '@angular/core';
+import { Component, computed, effect, signal } from '@angular/core';
 import { ListComponent } from './shared/list/list.component';
 import { CommonModule } from '@angular/common';
 
@@ -20,20 +20,21 @@ import { CommonModule } from '@angular/common';
 
 
          <button class="btn" (click)="dec()">-</button>
-         <span class="text-2xl">{{ counter() }}</span> <!-- usare un getter con () per ottenere il valore del signal -->
+         <span class="text-2xl" [style.color]="isZeroColor()">{{ counter() }}</span> <!-- usare un getter con () per ottenere il valore del signal -->
          <button class="btn" (click)="inc()">+</button>
 
-         <button class="btn"
-         (click)="reset()"
-         [style.display]="isZero() ? 'none' : 'inline'"
-         >reset
-        </button>
+         <button
+            class="btn"
+            (click)="reset()"
+            [style.display]="hideIfZero()"
+          >reset</button>
 
-        <div [hidden]="isZero()">Counter is zero</div>
-
-
+          <div [hidden]="!isZero()">Counter is zero!</div>
 
     </div>
+
+    <button (click)="doNothing()">doNothing</button>
+    <input type="text" (keydown)="doNothing()" class="input input-bordered">
 
   `,
 
@@ -53,6 +54,18 @@ export class AppComponent {
         });
 
       }
+      hideIfZero = computed(() => {
+        return this.counter() === 0 ? 'none' : 'inline'
+      })
+
+      isZero = computed(() => {
+        return this.counter() === 0
+      })
+
+
+      isZeroColor = computed(() => {
+        return this.counter() === 0 ? 'red' : 'green'
+      })
 
   dec() {
     this.counter.update(c => c - 1);
@@ -66,9 +79,14 @@ export class AppComponent {
     this.counter.set(0);
   }
 
-  isZero() {
-    console.log('is zero')
-    return this.counter() === 0;
+  // isZero() {
+  //   console.log('is zero')
+  //   return this.counter() === 0;
+  // }
+
+
+  doNothing() {
+    console.log('doNothing')
   }
 
 /* Immaginiamo di voler visualizzare un messaggio counter is zero quando il contatore ovviamenete è zero,
@@ -111,6 +129,72 @@ potremmo visualizzarlo o meno con ngIf, display none: [style.display]="counter()
   ma è bene capire come funziona la Change Detection e come possiamo ottimizzarla.
 
   i signal risolvono proprio questo problema con Computed Property
+
+
+  Abbiamo un template dinamico che imposta gli attributi display e hidden:
+
+          <button class="btn"
+         (click)="reset()"
+         [style.display]="isZero() ? 'none' : 'inline'"
+         >reset
+        </button>
+
+        <div [hidden]="isZero()">Counter is zero</div>
+
+        invocando una funzione isZero() ogi volta che la Change Detection viene triggherata,
+        il template processa la funzione isZero() che restituisce un booleano,
+        verifica che il counter sia uguale a zero o meno e applica eventualmente il display none o inline,
+        oppure true o false nel caso dell'hidden, ma la funzione viene invocata troppe volte,
+        ogni volta che trigghera la Change Detection, anche quando clicchiamo sul pulsante doNothing
+        è nell'input che chiama sempre doNothing() una funzione che non fa nulla se non un console.log
+
+        come ottimizzare il tutto
+
+        i signal vengono in aiuto proprio per queste situazioni,
+
+        invece di invocare questa funzione, andremo a creare un signal derivato,
+        possiamo creare un signal attraverso la proprietà computed che importiamo da angular core
+        e in questa computed possiamo inserire una funzione che restituisce per es: true o false in questo caso,
+        visto che isZero ci serve come booleano:
+
+          isZero = computed(() => {
+        console.log('is zero')
+        return true
+      })
+
+      isZero = computed(() => {
+        return this.counter() === 0
+      })
+
+        isZero viene invocato solo una volta all'avvio dell'applicazione, anche se scriviamo nel campo input
+
+        la computed property viene processata solo quando effettivamente una sua dipendenza interna cambia,
+        in questo caso il counter, con enormi benefici in termini di performance,
+        ora vedremo che effettivamente non avremo mai il console.log della computed
+        fino a che non viene aggiornato il signal.
+
+        possiamo anche creare più di uno stato derivato da un signal,
+        ad esempio:
+        potremmo anche creare un signal derivato che ci restituisce direttamente la stringa none o inline
+        creando un signal derivato hideIfZero facendo il controllo se è o meno uguale a zero,
+        ma restituiamo direttamente la stringa none o inline:
+
+
+     hideIfZero = computed(() => {
+        return this.counter() === 0 ? 'none' : 'inline'
+      })
+
+
+        così facendo display none viene effettivamente processata la funzione hideIfZero()
+        solo quando cambia il counter,
+
+
+        applichiamo il colore nel momento in cui il counter e zero:
+
+
+      isZeroColor = computed(() => {
+        return this.counter() === 0 ? 'red' : 'green'
+      })
 
   */
 
