@@ -64,7 +64,8 @@ export class AppComponent {
 
 
       isZeroColor = computed(() => {
-        return this.counter() === 0 ? 'red' : 'green'
+        console.log('isZeroColor')
+        return this.isZero() ? 'red' : 'green'
       })
 
   dec() {
@@ -157,13 +158,13 @@ potremmo visualizzarlo o meno con ngIf, display none: [style.display]="counter()
         e in questa computed possiamo inserire una funzione che restituisce per es: true o false in questo caso,
         visto che isZero ci serve come booleano:
 
-          isZero = computed(() => {
+      isZero = computed(() => {
         console.log('is zero')
-        return true
+          return true
       })
 
       isZero = computed(() => {
-        return this.counter() === 0
+          return this.counter() === 0
       })
 
         isZero viene invocato solo una volta all'avvio dell'applicazione, anche se scriviamo nel campo input
@@ -179,24 +180,47 @@ potremmo visualizzarlo o meno con ngIf, display none: [style.display]="counter()
         creando un signal derivato hideIfZero facendo il controllo se è o meno uguale a zero,
         ma restituiamo direttamente la stringa none o inline:
 
-
-     hideIfZero = computed(() => {
+      hideIfZero = computed(() => {
         return this.counter() === 0 ? 'none' : 'inline'
       })
-
 
         così facendo display none viene effettivamente processata la funzione hideIfZero()
         solo quando cambia il counter,
 
-
         applichiamo il colore nel momento in cui il counter e zero:
+        il colore del counter è rosso quando è zero, verde quando è diverso da zero,
+        ed è stabilito dall'attributo styleColor attraverso un signal derivato isZeroColor:
 
+        [style.color]="isZeroColor()"
+
+        questo signal in realtà non è un signal creato da zero ma è un computed property,
+        quindi un signal calcolato sulla base del valore di un'altro signal,
+        in questo caso quando counter è zero viene restituioto rosso o in alternativa verde,
 
       isZeroColor = computed(() => {
         return this.counter() === 0 ? 'red' : 'green'
       })
 
-  */
+        É importante capire che questo signal: this.counter() === 0
+        questa computed viene processata ogni volta che cambia il counter ad ogni variazione.
+        Ma le computed properties possono usare all'interno altre computed properties,
+        che alla fine sono sempre dei signal, quindi invece di usare this.counter() === 0
+        possiamo direttamente utilizzare la computer property this.isZero()
+
+        isZeroColor = computed(() => {
+            return this.isZero() ? 'red' : 'green'
+      })
+
+      il risultato è lo stesso ma mentre isZero() è calcolato ogni volta che cambia il counter,
+      è restituirà un booleano true o false, isZeroColor() viene calcolata solo quando cambia
+      il booleano restituito da isZero(), quindi il counter cambia da 0 a 1, ovviamente isZeroColor verrà triggherata,
+      ma quando cambia da 1 e 2, visto che isZero() è sempre true non verrà più ricalcolata mentre
+      prima sarebbe stata riprocessata.
+
+      se se clicchiamo sul counter + 1, verrà processato a true, se clicchiamo +1, 2,2 ecc diventa false,
+      cioè non sarà processato, solo da 1 a 0 e da 0 a 1, quindi solo quando cambia il valore del counter.
+
+      */
 
 }
 
