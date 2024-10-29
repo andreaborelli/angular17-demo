@@ -9,6 +9,13 @@ type Product = {
   cost: number;
 }
 
+// CONTEXTUAL PROPERTIES
+
+// è anche possibile utilizzare le contextual properties come:
+// index, first, last, odd e even
+// per recuperare alcune informazioni all'interno dell'ngFor
+// come sapere quale sia la posizione index (da 0 a length - 1),
+// il primo elemento, l'ultimo, quelli pari o dispari
 
 @Component({
   selector: 'app-root',
@@ -19,18 +26,16 @@ type Product = {
   ],
   template: `
 
-    <!-- ngIf e Signals -->
+    <!-- ngFor e Signals -->
+
+    <!-- In questo caso visualizziamo 0, 1, 2... davanti al product name -->
 
     <div class="centered-page sm">
+         <li *ngFor="let product of products(); let i = index">
+             {{i}}. {{product.name}}
+         </li>
+      </div>
 
-        <li *ngFor="let product of products()">{{ product.name }}</li>
-
-        <!-- applichiamo la direttiva *ngFor disponibile grazie al modulo CommonModule
-         è facciamo un for of all'interno, quindi: *ngFor="let product of products()"
-         ma usiamo le parentesi tonde products() perchè bisogna invocare un getter del signal
-         per recuperare il suo valore, e vedremo la lista renderizzata. -->
-
-    </div>
 
   `,
 
@@ -40,15 +45,6 @@ type Product = {
 })
 export class AppComponent {
 
-/* i signal possono contenere all'interno primitive o anche oggetti,
-array e in questo caso abbiamo un signal chiamato
-products che contiene al suo interno un array di prodotti,  products = signal<Product[]> <> generics
-abbiamo usato il generics tra l'altro per tipizzare l'array come Product array,
-che contiene le proprietà id: name: e cost:   */
-
-/* i signal di angular possono essere utilizzati tranquillamente con ngFor,
-nel caso in cui volessimo visualizzare es. tre tag <li> dinamicamente,
-quindi sull'elemento   */
 
  products = signal<Product[]>([
 
