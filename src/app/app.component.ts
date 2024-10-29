@@ -28,11 +28,11 @@ type Product = {
 
     <!-- ngFor e Signals -->
 
-    <!-- In questo caso visualizziamo 0, 1, 2... davanti al product name -->
+    <!-- Oppure sapere qual è il primo elento o l'ultimo... -->
 
     <div class="centered-page sm">
-         <li *ngFor="let product of products(); let i = index">
-             {{i}}. {{product.name}}
+         <li *ngFor="let product of products(); let i = index; let first = first; let last = last ">
+             {{i}}. {{product.name}} - {{first}} - {{last}}
          </li>
       </div>
 
