@@ -3,12 +3,19 @@ import { ListComponent } from './shared/list/list.component';
 import { CommonModule } from '@angular/common';
 
 
+type Product = {
+  id: number;
+  name: string;
+  cost: number;
+}
+
+
 @Component({
   selector: 'app-root',
   standalone: true,
   imports: [
     ListComponent,
-    CommonModule
+    CommonModule // contiene le direttive di angular come ngIf e ngFor ecc.
   ],
   template: `
 
@@ -16,19 +23,12 @@ import { CommonModule } from '@angular/common';
 
     <div class="centered-page sm">
 
-         <button class="btn" (click)="visible.set(!visible())">Click</button>
+        <li *ngFor="let product of products()">{{ product.name }}</li>
 
-         <!-- nel template non possiamo usare la funzione update e di conseguenza utilizziamo
-          questo approccio: (click)="visible.set(!visible())"
-          per evitare di creare un metodo nella classe di app.componente.ts -->
-
-        <h1 class="text-3xl" *ngIf="visible()">Hello</h1>
-        
-        <!-- quando signal ha un valore true l'elemento viene renderizzato altrimenti no
-         *ngIf è una direttiva che distrugge e ricrea l'elemento -->
-
-         <!-- <h1 class="text-3xl" [hidden]="!visible()">Hello</h1> : l'attributo hidden fa un display none quindi l'elemento lo troviamo sempre nel DOM,
-          quindi meglio usare le direttive ngIf per distruggere un elemento e ricrearlo -->
+        <!-- applichiamo la direttiva *ngFor disponibile grazie al modulo CommonModule
+         è facciamo un for of all'interno, quindi: *ngFor="let product of products()"
+         ma usiamo le parentesi tonde products() perchè bisogna invocare un getter del signal
+         per recuperare il suo valore, e vedremo la lista renderizzata. -->
 
     </div>
 
@@ -40,10 +40,23 @@ import { CommonModule } from '@angular/common';
 })
 export class AppComponent {
 
-/* i signal di angular possono essere utilizzati tranquillamente insiame alle direttive:
- ngIf, ngFor, ngSwitch, o con qualunque attributo dinamico del DOM */
+/* i signal possono contenere all'interno primitive o anche oggetti,
+array e in questo caso abbiamo un signal chiamato
+products che contiene al suo interno un array di prodotti,  products = signal<Product[]> <> generics
+abbiamo usato il generics tra l'altro per tipizzare l'array come Product array,
+che contiene le proprietà id: name: e cost:   */
 
- visible = signal(false);
+/* i signal di angular possono essere utilizzati tranquillamente con ngFor,
+nel caso in cui volessimo visualizzare es. tre tag <li> dinamicamente,
+quindi sull'elemento   */
+
+ products = signal<Product[]>([
+
+  { id: 1, name: 'Chocolate', cost: 3 },
+  { id: 2, name: 'Milk', cost: 1 },
+  { id: 3, name: 'Biscuits', cost: 2 }
+
+ ])
 
 }
 
