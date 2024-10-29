@@ -3,20 +3,6 @@ import { ListComponent } from './shared/list/list.component';
 import { CommonModule } from '@angular/common';
 
 
-type Product = {
-  id: number;
-  name: string;
-  cost: number;
-}
-
-// CONTEXTUAL PROPERTIES
-
-// è anche possibile utilizzare le contextual properties come:
-// index, first, last, odd e even
-// per recuperare alcune informazioni all'interno dell'ngFor
-// come sapere quale sia la posizione index (da 0 a length - 1),
-// il primo elemento, l'ultimo, quelli pari o dispari
-
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -26,17 +12,24 @@ type Product = {
   ],
   template: `
 
-    <!-- ngFor e Signals -->
+    <!--  @if block -->
 
-    <!-- Oppure sapere qual è il primo elento o l'ultimo... -->
+    <div class="centered-page sm flex">
 
-    <div class="centered-page sm">
-         <li *ngFor="let product of products(); let i = index; let first = first; let last = last ">
-             {{i}}. {{product.name}} - {{first}} - {{last}}
-         </li>
-      </div>
+     @if (logged()) {
 
+      <h1 class="page-title">Hi Dev</h1>
+      <button class="btn" (click)="logout()">Logout</button>
 
+     }@else {
+
+      <h1 class="page-title">Login</h1>
+      <button class="btn" (click)="signIn()">Sign In</button>
+
+     }
+
+    </div>
+    
   `,
 
   styles: `  /* la regola css non viene inserita in un array con parentesi quadre */
@@ -45,14 +38,17 @@ type Product = {
 })
 export class AppComponent {
 
+  // da Angular 17 abbiamo a disposizione delle alternative alle direttive come ngIf ngFor e ngSwitch
 
- products = signal<Product[]>([
+  logged = signal(false);
 
-  { id: 1, name: 'Chocolate', cost: 3 },
-  { id: 2, name: 'Milk', cost: 1 },
-  { id: 3, name: 'Biscuits', cost: 2 }
+  signIn() {
+    this.logged.set(true);
+  }
 
- ])
+  logout() {
+    this.logged.set(false);
+  }
 
 }
 
