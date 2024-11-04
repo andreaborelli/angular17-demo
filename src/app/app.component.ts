@@ -29,13 +29,21 @@ const initialState: Product[] = [
        è possibile recuperare l'index es. del prodotto cui stiamo iterando
        è salvarlo in una variabile i da mostrare poi all'interno del FOR su ogni elemento -->
 
-    <div class="centered-page sm">
+       <!--  VERSIONE AGGIORNATA.
+          Utilizziamo le contextual properties direttamente all'interno del blocco senza
+          la necessità di usare degli alias -->
 
-    @for (product of products(); track product.id; let i = $index; let last = $last) {
+          <!-- first: primo elemeto
+               odd: elemento dispari
+               even: elemento pari
+                -->
+
+    <div class="centered-page sm">
+    @for (product of products(); track product.id) {
               <li>
-                  {{i + 1}}. {{product.name}}
-                  @if(last) {
-                    <hr>
+                  {{$index + 1}}. {{product.name}}
+                  @if($last) {
+                      <hr>
                   }
               </li>
           } @empty {
