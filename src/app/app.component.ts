@@ -46,17 +46,19 @@ const initializeState: Product[] = [ // stato iniziale di un array di oggetti
       abbiamo visto come Mixare direttive con i nuovi blocchi for if ecc.
       -->
 
+      <!-- VERSIONE: @if block -->
+
     <div class="centered-page sm">
 
-      @for (product of products(); track product.id) {
-          <h1>{{ product.name }}</h1>
+    @for (item of products(); track item.id) {
+          <li>{{item.name}}</li>
       } @empty {
-          <div>Empty list</div>
-          <button class="btn" (click)="loadProducts()">Load</button>
+          <button (click)="load()">Load</button>
       }
-
-      <div *ngIf="!noItems()">There are {{ totalProducts() }} products</div>
-
+      @if(!noItems()) {
+          <h1>Total Items: {{products().length}}</h1>
+          <h1>Total Items: {{totalItems()}}</h1>
+      }
       <!-- <pre>{{ products() | json}}</pre> -->
 
     </div>
@@ -69,15 +71,17 @@ const initializeState: Product[] = [ // stato iniziale di un array di oggetti
 })
 export class AppComponent {
 
- products = signal<Product[]>([]);
+  products = signal<Product[]>([]);
 
- noItems = computed(() => this.products().length === 0);
+  noItems = computed(() => this.products().length === 0)
+  totalItems = computed(() => this.products().length)
 
- totalProducts = computed(() => this.products().length);
-
- loadProducts() {
-    this.products.set(initializeState);
- }
-
+  load() {
+    this.products.set([
+      {id: 1, name: 'Chocolate', cost: 3},
+      {id: 2, name: 'Milk', cost: 1},
+      {id: 3, name: 'Biscuits', cost: 2},
+    ])
+  }
 }
 
