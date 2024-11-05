@@ -12,67 +12,84 @@ import { CommonModule } from '@angular/common';
   ],
   template: `
 
-  <!-- Multiple SIgnals - create a tabbar navigation -->
+  <!-- Todo List width signals -->
 
-  <!-- al click del pulsante mostra il contenuto dell'oggetto -->
+  <!-- utilizziamo i signal e la nuova control flow syntax con if, for e via dicendo -->
 
-  <!-- es. che usa sia il FOR che l'IF all'interno dello stesso template
-   abbiamo unarray di prodotti e utilizziamo il FOR per visualizzare n pulsanti
-   sulla base del numero di prodotti, e ora immaginiamo di voler la descrizione per ogni prodotto
-   che aggiungiamo anche al type. Al click del pulsante vogliamo visualizzare la descrizione
-   sotto a tale pulsanti.
-   Inanzitutto potermmo fare: al click di un pulsante andare ad invocare il metodo selectProduct()
-   passando il prodotto che ho cliccato: selectProduct(product)
+  <!-- renderizziamo n elementi sulla base di quanti todo abbiamo.
+   track è obbligatorio per miglliorare le performance, quindi inseriamo track è la proprietà id
+   che angular userà per capire se un elemento è cambiato o meno tra i vari render in questo caso id -->
 
-   selectProduct(product: Product){
 
-  }
-   Questo prodotto lo salviamo in un nuovo signal che indica qual'è il prodotto attivo,
-   il prodotto selezionato, che chiamiamo:
+    <div class="centered-page sm flex flex-col gap-3">
+          <h1 class="page-title">Todo List</h1>
 
-   activeProduct = signal<Product | null>(null);
+          <!-- campo di input che all'invio invoca addTodo() passando la reference #inputRef al campo di input,
+           riceviamo la reference nel metodo (keydown.enter)="addTodo(inputRef)"
+           è leggiamo il valore input value:
+                      addTodo(input: HTMLInputElement) {
+                            console.log(input.value);
+                         }
+          aggiorniamo il signal con un array nuovo:
 
-   che è un signal che inizializiamo a null, visto che ovviamente all'inizio, all'avvio del componente
+          this.todos.update(todos => [...todos, newTodo]);
 
-      activeProduct = signal<Product | null>(null); non sarà valorizzato ma potrà contenere NULL,
-        come viene specificato tra i generics (parentesi angolari) oppure un prodotto usando union type di typeScript |
+          che contiene tutti gli elementi attuali contenuti nel signal
+          quindi todos, e aggiungiamo il nuovo elemento todo che è generato attraverso un oggetto newTodo:
 
-        quindi nel metodo di selectProduct() possiamo scrivere:
+          const newTodo: Todo = {
+            id: Date.now(),
+            title: input.value,
+            completed: false
+          }
 
-        this.activeProduct.set(product);
+          che contiene un id, Date.now() quindi fake perchè non abbiamo un server
+          dietro le quinte che ci genera un id univoco il titolo acquisito da
 
-        con il metodo set() dei signal e salvare al suo interno il nostro prodotto
+          input.value,
 
-        Così facendo ad ogni click activeProduct verrà valorizzato.
-        infatti con PIPE JSON è vedremo che al click abbiamo l'intero oggetto del prodotto selezionato,
-        è potremmo visualizzare la descrizione, il name, il costo ecc.
-
-        forse: dobbiamo usare il punto di domanda ? perchè activeProduct come specificato:
-
-        <Product | null> è potenzialmente NULL e quindi se non avessimo lo STRICT MODE () di TypeScript
-        in questo caso avremmo un eccezione al primo render perchè essendo NULL
-        il nostro oggetto di activeProduct
-
-              <pre>{{ activeProduct()?.description}}</pre>
-
-        description ovviamente sarebbe letto da un oggetto null generando un eccezzione a runtime
-
-        quindi usiamo il ? per evitare questo problema. ora al click vedremo la descrizione del prodotto,
-        oppure il costo, il nome ecc.
+          e la proprietà completed: false, perchè vogliamo che di default in nuovo todo non sia flaggato come completato.
       -->
+          <!-- per il toggle: rimaniamo in ascolto dell'evento  (change)="toggleTodo(todo)"
+           invocando il metodo toggleTodo() passando il todo di cui vogliamo flaggare la proprietà completed -->
 
-    <div class="centered-page sm">
-    @for (product of products(); track product.id) {
+           <div>
+              {{totalCompleted()}} completed | {{totalTodos()}} todos
+           </div>
 
-      <button class="btn" (click)="selectProduct(product)">{{ product.name }}</button>
-                  }
-      @if (activeProduct()) {
-        <pre>{{ activeProduct()?.name}}</pre>
-        <pre>{{ activeProduct()?.cost}}</pre>
-        <pre>{{ activeProduct()?.description}}</pre>
-      } @else {
-        <div>Select a product</div>
-      }
+           <input
+           type="text"
+           class="input input-bordered"
+           #inputRef
+           (keydown.enter)="addTodo(inputRef)"
+            placeholder="Add todo"
+           >
+
+          <ul>
+            @for (todo of todos(); track todo.id) {
+
+              <li class="flex justify-between">
+
+                <div class="flex gap-3">
+
+                <input type="checkbox" [checked]="todo.completed"
+                (change)="toggleTodo(todo)"
+                >
+
+                <span [ngClass]="{'line-through' : todo.completed}"> <!-- se todo.completed è true aggiungiamo la classe line-through -->
+                {{todo.title}}
+                </span>
+
+                </div>
+
+                <button (click)="removeTodo(todo)">❌</button>
+              </li>
+
+            }
+
+          </ul>
+
+          <!-- <pre>{{ todos() | json }}</pre> -->
 
     </div>
 
@@ -84,26 +101,53 @@ import { CommonModule } from '@angular/common';
 })
 export class AppComponent {
 
-
-  products = signal<Product[]>([
-    { id: 1, name: 'Chocolate', cost: 3, description: 'lorem...' },
-    { id: 2, name: 'Milk', cost: 1, description: 'bla bla..' },
-    { id: 3, name: 'Biscuits', cost: 2, description: 'super good!' },
+  todos = signal<Todo[]>([ // array di oggetti di tipo Todo
+    { id: 1, title: 'Todo 1', completed: true },
+    { id: 2, title: 'Todo 2', completed: false },
+    { id: 3, title: 'Todo 3', completed: true },
   ]);
 
-  activeProduct = signal<Product | null>(null);
+  totalCompleted = computed(() => this.todos().filter(t => t.completed).length);
+  // computer property che ci restituisce il numero di todo completati
+  totalTodos = computed(() => this.todos().filter(t => !t.completed).length);
+  // computer property che ci restituisce il numero di todo non completati
 
-  selectProduct(product: Product){
-    this.activeProduct.set(product);
-    console.log(product);
+  // metodo per rimuovere un todo
+  addTodo(input: HTMLInputElement){
+      const newTodo: Todo = { // creiamo un nuovo todo
+        id: Date.now(), //
+        title: input.value,
+        completed: false
+      }
+      console.log(input.value);
+      this.todos.update(todos => [...todos, newTodo]); // aggiorniamo il signal con un nuovo array
+      input.value = ''; // puliamo il campo di input
+  }
+
+  // metodo per rimuovere un todo
+  removeTodo(todoRemove: Todo){
+    this.todos.update(todos => todos.filter(todo => todo.id !== todoRemove.id));
+    // update è un metodo di signal che ci permette di aggiornare il valore del signal
+    /* todos.filter ci permette di creare una nuova collezione
+    dove ci sono tutti gli elementi eccetto quello che vogliamo rimuovere */
+}
+
+  // metodo per flaggare un todo come completato o no
+  toggleTodo(todoToToggle: Todo){
+    this.todos.update(todos => { // invochiamo un nuovo update del signal
+      return todos.map( // map è un metodo che ci permette di creare una collezione di pari elementi a quella originale
+        t => t.id === todoToToggle.id ? {...t, completed: !t.completed} : t
+        /* se id su cui stiamo iterando è quello che vogliamo modificare,
+        in questo caso crea un clone del todo e gli modifico la proprietà completed,
+        in tutti gli altri casi restituisco l'elemento così com'è */
+      )
+    })
   }
 
 }
 
-type Product = {
+interface Todo {
   id: number;
-  name: string;
-  description: string;
-  cost: number;
+  title: string;
+  completed: boolean;
 }
-
