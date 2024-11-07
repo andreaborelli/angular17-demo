@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-phone',
@@ -19,8 +19,12 @@ import { Component } from '@angular/core';
 })
 export class PhoneComponent {
 
+  // proprietà personalizzabili per farlo bisogna decorare la proprietà con @Input() inportato da @angular/core
 
-  url = 'assets/images/pexels.png';
-  alt = 'landscape';
+
+  @Input() url: string = ''; // valore di default stringa vuota
+  @Input() alt: string = 'image'; // valore di default stringa 'image'
+
+
 
 }
