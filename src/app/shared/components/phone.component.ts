@@ -1,5 +1,5 @@
 import { UpperCasePipe } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { booleanAttribute, Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-phone',
@@ -9,14 +9,24 @@ import { Component, Input } from '@angular/core';
   ],
   template: `
 
+  <!-- Input Transform booleanAttribute -->
+
    <div class="mockup-phone">
   <div class="camera"></div>
   <div class="display">
     <div class="artboard artboard-demo phone-1">
       <img [src]="url" [alt]="alt" class="w-full">
-      {{ alt }}
+      @if (showTitle) {
+        <div>{{ alt }}</div>
+      }
+
     </div>
   </div>
+  <!-- Per rendere il titolo opzionale con un attributo in Input showTitle che di default è false,
+   quindi vogliamo che il testo sia nascosto di default, a meno che l'utente non lo specifichi con un true
+   che lo vuole visualizzare.
+   Facciamo quindi in modo che il title non venga renderizzato con il blocco @if
+   tuttavia essendo una proprietà in Input, possiamo eventualmente passarlo dall'esterno ne componente -->
 </div>
   `,
   styles: ``
@@ -25,36 +35,23 @@ export class PhoneComponent {
 
   // proprietà personalizzabili per farlo bisogna decorare la proprietà con @Input() inportato da @angular/core
 
-  @Input({ required: true }) url: string = ''; // valore di default stringa vuota
+  @Input({ required: true })
+  url: string = ''; // valore di default stringa vuota
+
   @Input({ transform: (val: string) => {
     return val.toUpperCase();
-  } }) alt: string = 'image'; // valore di default stringa 'image'
+  } })
+
+  alt: string = 'image'; // valore di default stringa 'image'
+
+  @Input({ transform: booleanAttribute })
+  showTitle = false; // valore di default true
 
 
-   /* Input required
-
-   { required: true }
-
-   decoratori @Input supportano alcune proprietà tra cui required a true
-   che ci permettono di definire una proprietà come obbligatoria
-   è avremo un eccezione in fase di compilazione quindi non potremo più utilizzare
-   questo componente se non specifichiamo la proprietà url e veniamo subito bloccati
-   da un errore di compilazione, quindi la proprietà è richiesta. */
-
-   /* immaginiamo di voler renderizzare il testo alt in uppercase
-   a prescindere di come lo passiamo, quindi sempre in maiuscolo
-   potremmo usare il pipe uppercase alt | uppercase importandolo in import: UpperCasePipe
-   oppure se volessimo fare una personalizzazione non prevista dalle pipe di default è quindi
-   potremmo es. avere anche una procedura che calcola l'output sulla base di determinate condizioni
-   proprietà, variabili oppure potremmo voler formattare la stringa in altro modo o qualunque altra
-   operazione di trasformazione.
-   Possiamo usare la proprietà transform del decoratore @Input nel quale possiamo specificare una funzione
-   che riceve il valore passato in input:  (val: string)  e può manipolarlo con es return prima di renderizzarlo nel template,
-   quindi ogni volta che passiamo una stringa alt es. concatenazione coè il concat di una stringa:  return val + val;
-   possiamo passare la parola es:  return 'foo'; oppure return val.toUpperCase();
-   o qualunque altra operazione vogliamo effettuare come trasformazione.
-   Interessante se passiamo un componente es. se passiamo un array di dati, o un oggetto
-   cosa che possiamo fare tramite le proprietà in input, potremmo passare un array di number
-   e trasformare in un array di string, o un array di prodotti e filtrarlo e cosi via...   */
+      /* Una nuova feature introdotta da Angular 16 in poi, è la possibilità di avere un transform booleanAttribute
+        questo attributo fa si che sia possibile passare un booleano true hardcoded senza la necessità
+        di specificare le quadre, E neppure di indicare il boolean true, molto utile e presente
+        anche in altri framework JSX come sistema di template.
+        che */
 
 }
