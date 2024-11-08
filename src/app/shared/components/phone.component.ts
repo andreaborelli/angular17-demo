@@ -5,7 +5,7 @@ import { Component, Input } from '@angular/core';
   selector: 'app-phone',
   standalone: true,
   imports: [
-    UpperCasePipe
+
   ],
   template: `
 
@@ -14,7 +14,7 @@ import { Component, Input } from '@angular/core';
   <div class="display">
     <div class="artboard artboard-demo phone-1">
       <img [src]="url" [alt]="alt" class="w-full">
-      {{ alt | uppercase }}
+      {{ alt }}
     </div>
   </div>
 </div>
@@ -26,7 +26,10 @@ export class PhoneComponent {
   // proprietà personalizzabili per farlo bisogna decorare la proprietà con @Input() inportato da @angular/core
 
   @Input({ required: true }) url: string = ''; // valore di default stringa vuota
-  @Input() alt: string = 'image'; // valore di default stringa 'image'
+  @Input({ transform: (val: string) => {
+    return val.toUpperCase();
+  } }) alt: string = 'image'; // valore di default stringa 'image'
+
 
    /* Input required
 
