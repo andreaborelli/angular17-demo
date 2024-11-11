@@ -10,8 +10,8 @@ import { PhoneComponent } from "./shared/components/phone.component";
   imports: [
     ListComponent,
     PhoneComponent,
-    CommonModule // contiene le direttive di angular come ngIf e ngFor ecc.
-    ,
+    CommonModule, // contiene le direttive di angular come ngIf e ngFor ecc.
+
 ],
   template: `
 
@@ -21,6 +21,7 @@ import { PhoneComponent } from "./shared/components/phone.component";
       [url]="url"
       [alt]="alt"
       [showTitle]="true"
+      size="75"
       />
       <app-phone
       url="assets/images/angular.png"
