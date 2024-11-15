@@ -18,19 +18,19 @@ import { PhoneComponent } from "./shared/components/phone.component";
   <!-- Input required -->
 
       <app-phone
-      [url]="url"
+      [src]="url"
       [alt]="alt"
       [showTitle]="true"
       size="sm"
       />
       <app-phone
-      url="assets/images/angular.png"
+      src="assets/images/angular.png"
       alt="angular"
       showTitle
       size="md"
       />
       <app-phone
-      [url]="url"
+      [src]="url"
       alt="angular"
       showTitle
       size="xl"
