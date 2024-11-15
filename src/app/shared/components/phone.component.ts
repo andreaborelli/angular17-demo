@@ -94,7 +94,25 @@ export class PhoneComponent {
         di specificare le quadre, E neppure di indicare il boolean true, molto utile e presente
         anche in altri framework JSX come sistema di template.
         che */
-  @Input({ transform: numberAttribute })
+
+
+  @Input({ transform: (val: 'sm' | 'md' | 'xl' ) => {
+    switch (val) {
+      case 'sm': return 50;
+      case 'md': return 75;
+      default:
+      case 'xl': return 100;
+    }
+    //console.log('val', val);
+    //return val === 'sm' ? 50 : 100;
+    // se il valore è sm allora la larghezza è 50, altrimenti 100
+  }})
   size = 100; // valore di default 100
+
+
+   /* usiamo la funzione di trasformazione transform: è riceviamo il valore che sarà una stringa sm o xl
+   ed effettuiamo una conversione, usiamo un ternario, perchè abbiamo solo 2 circostanze e se ne
+   avessimo 3,4, n casi da gestire useremo uno switch case , una dictionary o altre strategie.
+   */
 
 }

@@ -21,28 +21,43 @@ import { PhoneComponent } from "./shared/components/phone.component";
       [url]="url"
       [alt]="alt"
       [showTitle]="true"
-      size="75"
+      size="sm"
       />
       <app-phone
       url="assets/images/angular.png"
       alt="angular"
       showTitle
+      size="md"
+      />
+      <app-phone
+      [url]="url"
+      alt="angular"
+      showTitle
+      size="xl"
       />
 
-      <!-- [showTitle]="true": tuttavia essendo una proprietà in Input,
-        possiamo eventualmente passarlo dall'esterno nel componente
-        se passiamo la proprietà showTitle="true" senza le quadre riceveremmo un errore.
-        il problema è che showTitle si aspetta un booleno, ma true viene trattato come una stringa
-        perchè non abbiamo messo le parentesi quadre [showTitle]="true"
-        quando IMPOSTIAMO UN ATTRIBUTO SENZA LE QUADRE STIAMO SEMPRE PASSANDO UNA STRINGA
-        usiamo quindi le quadre e il data type viene mantenuto, quindi true è effettivamente un booleano.
+        <!-- il passaggio della proprietà size ci permette di avere un'estrema
+       flessibilità perchè possiamo passare qualunque dimensione, ma talvolta
+       questa flessibilità è pericolosa perchè permette a noi sviluppatori,
+       del futuro o a un collega di passare magari una proprietà in maniera
+       impropria, un valore che non dovrebbe essere supportato
+       possiamo quindi es. stabilire che le larghezze siano solo 2 o 3,
+       es. 25, 50, 100 e lo possiamo fare dando la possibilità all'utente di passare
+       es. sm che sta per small, xl che sta per large e così via
+       es sm sta per small con il valore 50, e xl co il valore a 100 -->
 
-        Una nuova feature introdotta da Angular 16 in poi, è la possibilità di avere un transform booleanAttribute
-        questo attributo fa si che sia possibile passare un booleano true hardcoded senza la necessità
-        di specificare le quadre così:  showTitle
-        E neppure di indicare il boolean true, molto utile e presente
-        anche in altri framework JSX come sistema di template.
-        -->
+       <!-- Tuttavia se passassimo un valore non corretto:  size="xldhgb"
+        cioè non supportato verrà applicato sempre 100
+        possiamo evitare di passare dei valori non corretti andando a specificare
+        con il literal types e una union (val: 'sm' | 'xl' ) che i valori supportati siano solo sm e xl
+        quindi se passiamo qualcosa di non corretto riceveremo un errore di compilazione
+         @Input({ transform: (val: 'sm' | 'md' | 'xl' ) => {
+                console.log('val', val);
+                return val === 'sm' ? 50 : 100;
+              // se il valore è sm allora la larghezza è 50, altrimenti 100
+                }})
+         possiamo anche aggiungere varie unità di misura, è quindi potremmo avere una switch case
+           -->
 
 
 <!-- AppComponent componente parent -->
@@ -57,6 +72,8 @@ export class AppComponent {
 
   url = 'assets/images/pexels.png';
   alt = 'landscape';
+
+
 
 }
 
