@@ -1,9 +1,14 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Component, inject, Input, OnInit, SimpleChanges } from '@angular/core';
+import { User } from '../../model/user';
+import { JsonPipe } from '@angular/common';
 
 @Component({
   selector: 'app-user-profile',
   standalone: true,
-  imports: [],
+  imports: [
+    JsonPipe
+  ],
   template: `
 
   <!-- proprietà in Input ad un componente, è le abbiamo utilizzato all'interno del template  -->
@@ -13,111 +18,64 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
  immaginiamo di voler fare una chiamata al server quando il componente riceve es. id dell'utente    -->
 
     <p>
-      user-profile works!
+      CURRENT ID: {{ id }}
     </p>
+
+    <pre>{{ user | json }}</pre>
   `,
   styles: ``
 })
-export class UserProfileComponent implements OnInit, OnDestroy {
+export class UserProfileComponent {
   @Input() id: number | undefined;
-  timer: ReturnType<typeof setInterval>;
 
-  constructor() {
-    console.log('constructor', this.id)
+  user: User | undefined;
 
-    this.timer = setInterval(() => {
-      console.log('timer')
-    }, 1000)
+  http = inject(HttpClient)
+
+  ngOnChanges(changes: SimpleChanges) {
+    console.log('ngOnChanges', changes)
+    if (changes['id'].firstChange){
+      //...qui possiamo fare qualcosa
+    }
+    this.http.get<User>(`https://jsonplaceholder.typicode.com/users/${changes['id'].currentValue}`)
+    .subscribe( res => {
+      // console.log(res);
+      this.user = res; // mando a video l'oggetto user con tag <pre> per renderlo più leggibile
+    })
+    }
+
+  /* ngOnInit trigghera una sola volta pur incrementando il valore:
+
+   inc() {
+    if (this.currentId < 10) {
+      this.currentId++;
+    } else {
+      this.currentId = 1;
+    }
   }
 
-  ngOnInit() {
-    console.log('ngOnInit', this.id)
-  }
+  se volessimo intercettare le nuove proprietà in input che vengono passate al componente
+  dovremmo utilizzare il metodo del ciclo di vita ngOnChanges, che ha una rispettiva interfaccia:
 
-  ngOnDestroy() {
-    clearInterval(this.timer)
-  }
+   ngOnChanges(changes: SimpleChanges) {
+    console.log('ngOnChanges', this.id);
+    }
 
-
-
-  /* ngOnInit */
-
-  /* immaginiamo se volessimo fare una chiamata al server quando l'id è disponibile
-  non potremmo farlo nel costruttore facendo un print ad es. console.log(this.id) sarà undefined
-   il costruttore è invocato troppo presto rispetto a quando sono disponibili le proprietà in input
-
-   è per questo motivo esiste un metodo del life cycle (ciclo di vita)
-   che possiamo implementare attraverso un interfaccia OnInit con implements OnInit
-   è ci richiede che venga definito un metodo ngOnInit all'interno
-
-   in realtà verrà automaticamente invocato ngOnInit quqndo la proprieta in input è disponibile
-   e potremma potenzialmente fare operazioni es. una get per recuperare i dati dell'utente
-
-   ngOnInit non aspetta che la proprietà in input id sia valorizzata,
-   perchè se dal parent avessi passato una proprietà id dinamicamente es. [id]="value"
-   questo value potenzialmente potrebbe essere popolato da una chiamata al server
-   la prima volta che il template renderizza è value non è ancora popolato arriverà undefined al componente figlio
-   è sia nel costruttore che nel ngOnInit arriverà undefined
-   quindi dovremmo aspettare il giro successivo quando il valore viene popolato ed eventualmente riceverlo. con ngOnChange */
-
-
-   /* ngOnDestroy */
-
-    /* ngOnDestroy è un metodo del ciclo di vita che viene invocato quando il componente viene distrutto
-    infatti ci sarà utile per distruggere qualcosa quando il componente viene distrutto
-    es. con set interval:
-
-    constructor(){
-       //  console.log(this.id);
-
-          setInterval(() => {
-              console.log('setInterval');
-          }, 1000);
-        }
-  che visualizza ogni secondo un messaggio un console.log timer
-
-  se il componente fosse distrutto per vari motivi es. cambio di pagina, cambio di rotta, root
-  o es. creaiamo una proprietà visible con un pulsante che fa il toggle,
-
-  <button (click)="visible = !visible">
-  Toggle
- </button>
-
-  con sopra un @if
-    @if(visible){
-    <app-user-profile [id]="1"/>
-  }
-  che crea o distrugge il componente user-profile, vedremo che se la proprietà visible e true
-
-    visible = true;
-
-    il componente viene visualizzato e parte il timer al click su toggle il componente viene distrutto,
-    è il timer continua a girare, questo vuol dire, che in realtà dovremmo effettuare
-    un'operazione di distruzione di questo timer quando il componente a sua volta viene eliminato dallo schermo
-    è per farlo abbiamo il ciclo di vita OnDestroy ha la sua interfaccia con il metodo ngOnDestroy
-    dove possiamo eliminare il timer,
-    creiamo una reference al timer:
-       timer: number | undefined; oppure timer: ReturnType<typeof setInterval>;
-       che lo assegniamo con this.timer a setInterval:
-
-         constructor() {
-          console.log('constructor', this.id)
-
-           this.timer = setInterval(() => {
-           console.log('timer')
-          }, 1000)
-        }
-
-        e nel metodo ngOnDestroy:
-
-        ngOnDestroy() {
-          clearInterval(this.timer)
-        }
-
-        ora vedremo che il timer parte ma appena clik su toggle il timer viene distrutto
-        appuna riclicco su toggle e visualizzo il componente il timer riparte
-        perchè ngOnInit viene di nuovo invocato ed ecco che viene distrutto il componente.
+    una cosa importante è che il metodo ngOnChanges viene chiamato prima di ngOnInit,
+    è importante sopratutto le prime volte si potrebbe pensare che ngOnInit venga chiamato prima di ngOnChanges
+    possiamo inizializzare una proprietà in ngOnInit da usare poi in ngOnChanges, ma non è così
+    prima viene chiamato ngOnChanges e poi ngOnInit è ogni qualvolta aggiorniamo il valore della proprietà
+    es: cliccando sul + trigghera poi ngOnChanges con il nuovo valore
+    da notare ngOnChanges trigghera ogni volta che cambia una qualunque proprietà in input non una specifica.
+    ogni volta che cambia qualunque proprietà
   */
 
+    /* changes: SimpleChanges
+    è una proprietà interessante perchè mi permette di sapere quali proprietà sono cambiate,
+    changes è un oggetto che contiene le proprietà in input che sono cambiate in quel momento
+    es. changes id possiamo recuperare poi delle proprietà interessanti,
+    come currentValue che equivale a this.id il valore corrente che ha in quel momento quella proprietà
+    previusValue che è undefined, la prima volta che arriva un valore popolato di ID
+    e se è la prima volta che cambia con firstChange: true.  */
 
 }

@@ -17,27 +17,25 @@ import { PhoneComponent } from "./shared/components/phone.component";
 ],
   template: `
 
-  @if(visible){
-    <app-user-profile [id]="1"/>
-  }
 
-  <!-- Component LifeCycle - ngOnInit e ngOnDestroy -->
+  <!-- Component LifeCycle - ngOnChanges -->
+    <div>
+    <app-user-profile [id]="currentId"/> <!-- instanzio componente figlio -->
 
-    <app-user-profile [id]="1"/> <!-- instanzio componente figlio -->
+      <button class="btn"
+      (click)="inc()"
+      >+</button>
 
-<!-- [id]="1" con le quadre perchè lo vogliamo passare di tipo number,
- altrimenti senza le quadre sarebbe una stringa -->
+      </div>
 
-        <button (click)="visible = !visible">
-          Toggle
-        </button>
-
-      <app-phone
+  <app-phone
       [src]="url"
       [alt]="alt"
       [showTitle]="true"
       size="sm"
       />
+
+
 
 <!-- AppComponent componente parent -->
 
@@ -52,7 +50,18 @@ export class AppComponent {
   url = 'assets/images/pexels.png';
   alt = 'landscape';
 
-  visible = true;
+  currentId = 1; // proprietà passata al componente figlio in maniera statica il valore 1
+
+  inc() {
+    if (this.currentId < 10) {
+      this.currentId++;
+    } else {
+      this.currentId = 1;
+    }
+  }
+
+
+
 
 }
 
