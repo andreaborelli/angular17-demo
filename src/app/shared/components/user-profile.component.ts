@@ -18,7 +18,7 @@ import { JsonPipe } from '@angular/common';
  immaginiamo di voler fare una chiamata al server quando il componente riceve es. id dell'utente    -->
 
     <p>
-      CURRENT ID: {{ id }}
+      CURRENT ID: {{ userId }}
     </p>
 
     <pre>{{ user | json }}</pre>
@@ -26,56 +26,63 @@ import { JsonPipe } from '@angular/common';
   styles: ``
 })
 export class UserProfileComponent {
-  @Input() id: number | undefined;
+  userId: number | undefined;
+  @Input() set id(val: number | undefined){
+      console.log('val', val);
+      this.userId = val;
+          this.http.get<User>(`https://jsonplaceholder.typicode.com/users/${val}`)
+    .subscribe( res => {
+      // console.log(res);
+      this.user = res; // mando a video l'oggetto user con tag <pre> per renderlo più leggibile
+    })
+  }
 
   user: User | undefined;
 
   http = inject(HttpClient)
 
-  ngOnChanges(changes: SimpleChanges) {
-    console.log('ngOnChanges', changes)
-    if (changes['id'].firstChange){
-      //...qui possiamo fare qualcosa
-    }
-    this.http.get<User>(`https://jsonplaceholder.typicode.com/users/${changes['id'].currentValue}`)
-    .subscribe( res => {
-      // console.log(res);
-      this.user = res; // mando a video l'oggetto user con tag <pre> per renderlo più leggibile
-    })
-    }
+  // ngOnChanges(changes: SimpleChanges) {
+  //   console.log('ngOnChanges', changes)
+  //   if (changes['id'].firstChange){
+  //     //...qui possiamo fare qualcosa
+  //   }
+  //   this.http.get<User>(`https://jsonplaceholder.typicode.com/users/${changes['id'].currentValue}`)
+  //   .subscribe( res => {
+  //     // console.log(res);
+  //     this.user = res; // mando a video l'oggetto user con tag <pre> per renderlo più leggibile
+  //   })
+  //   }
 
-  /* ngOnInit trigghera una sola volta pur incrementando il valore:
+  /* ngOnChanges viene invocato ogni qualvolta una qualunque
+  delle proprietà in input viene passata al componente
+  è quindi se volessi effettuare un operazione solo quando cambia l'ID
+  dovrei aggiungere all'ngOnChanges un if(changes['id'])...
+  è quindi se l'id è disponibile all'interno di changes allora posso fare qualcosa
+  è con una serie di if o uno switch case potremmo effettuare delle operazioni a seconda
+  di quali proprieta in input sono cambiate.
+  Oppure posso effettuare delle operazioni solo quando cambia la proprietà ID
+  questo può essere fatto anche attraverso l'utilizzo di un input setter
+  quindi creaiamo @Input set nome della proprietà che vogliamo esporre all'esterno cioè id,
+  riceverà una funzione, nello specifico di tipo number e undefined:
+  
+      @Input() set id(val: number | undefined){
 
-   inc() {
-    if (this.currentId < 10) {
-      this.currentId++;
-    } else {
-      this.currentId = 1;
-    }
-  }
+    console.log('val', val);
 
-  se volessimo intercettare le nuove proprietà in input che vengono passate al componente
-  dovremmo utilizzare il metodo del ciclo di vita ngOnChanges, che ha una rispettiva interfaccia:
+        }
 
-   ngOnChanges(changes: SimpleChanges) {
-    console.log('ngOnChanges', this.id);
-    }
+    è all'interno possiamo effettuare le operazioni che vogliamo.
+    vedremo che al click sul pulsante in console vedremo visualizzato val con il nuovo ID passato.
+    spostiamo la chiamata http all'interno del setter sostituiamo il valore dell chaimata changes
+    con val che sarebbe il nostro ID passato.
+    ovviamente se avessimo altre proprietà ID tipo mappe, contatore ecc.
+    potremmo fare di creare altri input setter ed effettuare operazioni diverse a secondo delle proprietà in input
+    passate al componente.
+    l'unico problema è che id non diventa una proprietà della classe, non possiamo usarla nel template
+    perchè non disponibile, quindi dobbiamo creare una proprietà di appoggio:
 
-    una cosa importante è che il metodo ngOnChanges viene chiamato prima di ngOnInit,
-    è importante sopratutto le prime volte si potrebbe pensare che ngOnInit venga chiamato prima di ngOnChanges
-    possiamo inizializzare una proprietà in ngOnInit da usare poi in ngOnChanges, ma non è così
-    prima viene chiamato ngOnChanges e poi ngOnInit è ogni qualvolta aggiorniamo il valore della proprietà
-    es: cliccando sul + trigghera poi ngOnChanges con il nuovo valore
-    da notare ngOnChanges trigghera ogni volta che cambia una qualunque proprietà in input non una specifica.
-    ogni volta che cambia qualunque proprietà
-  */
+    userId di tipo number | undefined
 
-    /* changes: SimpleChanges
-    è una proprietà interessante perchè mi permette di sapere quali proprietà sono cambiate,
-    changes è un oggetto che contiene le proprietà in input che sono cambiate in quel momento
-    es. changes id possiamo recuperare poi delle proprietà interessanti,
-    come currentValue che equivale a this.id il valore corrente che ha in quel momento quella proprietà
-    previusValue che è undefined, la prima volta che arriva un valore popolato di ID
-    e se è la prima volta che cambia con firstChange: true.  */
+ */
 
 }

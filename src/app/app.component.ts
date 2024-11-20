@@ -18,7 +18,8 @@ import { PhoneComponent } from "./shared/components/phone.component";
   template: `
 
 
-  <!-- Component LifeCycle - ngOnChanges -->
+  <!-- Input Setters -->
+   
     <div>
     <app-user-profile [id]="currentId"/> <!-- instanzio componente figlio -->
 
