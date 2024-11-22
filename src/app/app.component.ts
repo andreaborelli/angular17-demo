@@ -17,26 +17,25 @@ import { PhoneComponent } from "./shared/components/phone.component";
 ],
   template: `
 
-
   <!-- Input Setters -->
-   
-    <div>
-    <app-user-profile [id]="currentId"/> <!-- instanzio componente figlio -->
 
-      <button class="btn"
-      (click)="inc()"
+    <div>
+   <!--  <app-user-profile [id]="currentId"/> instanzio componente figlio -->
+
+    <button
+        class="btn"
+        (click)="inc()"
       >+</button>
 
-      </div>
+      <button class="btn" (click)="add()">add</button>
 
-  <app-phone
-      [src]="url"
-      [alt]="alt"
-      [showTitle]="true"
-      size="sm"
+      <button class="btn" (click)="doNothing()">CLICK ME</button>
+      <input type="text" (keydown)="doNothing()">
+
+      <app-user-profile
+        [id]="currentId"
+        [items]="list"
       />
-
-
 
 <!-- AppComponent componente parent -->
 
@@ -53,6 +52,12 @@ export class AppComponent {
 
   currentId = 1; // proprietà passata al componente figlio in maniera statica il valore 1
 
+  list = [1, 2, 3]
+
+  add() {
+    this.list = [...this.list, 4]
+  }
+
   inc() {
     if (this.currentId < 10) {
       this.currentId++;
@@ -61,8 +66,9 @@ export class AppComponent {
     }
   }
 
+  doNothing() {
 
-
+  }
 
 }
 
