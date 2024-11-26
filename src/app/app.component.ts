@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { PhoneComponent } from "./shared/components/phone.component";
 import { TimelineComponent } from "./shared/components/timeline.component";
 import { AccordionItemComponent } from "./shared/components/accordion-item.component";
+import { AlertComponent } from "./shared/components/alert.component";
 
 
 @Component({
@@ -16,11 +17,21 @@ import { AccordionItemComponent } from "./shared/components/accordion-item.compo
     UserProfileComponent,
     CommonModule,
     TimelineComponent,
-    AccordionItemComponent
+    AccordionItemComponent,
+    AlertComponent
 ],
   template: `
 
-  <!-- Accordion Component -->
+  <!-- Alert Component -->
+
+  <app-alert
+  (onCancel)="cancel()"
+  (onConfirm)="approve()"
+  />
+  <app-alert
+  (onCancel)="doSomethingAlert()"
+  (onConfirm)="doSomethingElse()"
+  />
 
     <app-timeline [items]="timeLineList"/>
         <!-- [items]="timeLineList" passiamo la proprietà items,
@@ -56,6 +67,10 @@ import { AccordionItemComponent } from "./shared/components/accordion-item.compo
     <app-accordion-item groupName="another" title="three">
       <button class="btn btn-info" (click)="doSomething()">Click Me</button>
       </app-accordion-item>
+
+
+
+
   `,
 
   styles: `  /* la regola css non viene inserita in un array con parentesi quadre */
@@ -75,5 +90,23 @@ export class AppComponent {
   doSomething() {
     window.alert('Hello');
   }
+
+// Alert Component
+  approve() {
+    window.alert('Approved');
+  }
+
+  cancel() {
+    window.alert('Denied');
+  }
+
+  doSomethingAlert() {
+    console.log('doSomethingAlert');
+  }
+
+  doSomethingElse() {
+    console.log('doSomethingElse');
+  }
+
 }
 
