@@ -4,6 +4,7 @@ import { ListComponent } from './shared/list/list.component';
 import { CommonModule } from '@angular/common';
 import { PhoneComponent } from "./shared/components/phone.component";
 import { TimelineComponent } from "./shared/components/timeline.component";
+import { AccordionItemComponent } from "./shared/components/accordion-item.component";
 
 
 @Component({
@@ -14,20 +15,47 @@ import { TimelineComponent } from "./shared/components/timeline.component";
     PhoneComponent,
     UserProfileComponent,
     CommonModule,
-    TimelineComponent
+    TimelineComponent,
+    AccordionItemComponent
 ],
   template: `
 
-  <!-- Input Setters -->
+  <!-- Accordion Component -->
 
     <app-timeline [items]="timeLineList"/>
-
-    <app-timeline [items]="timeLineList" vertical/>
-    
         <!-- [items]="timeLineList" passiamo la proprietà items,
          parentesi quadre perchè passiamo un'espressione
          con il valore timeLineList -->
+    <app-timeline [items]="timeLineList" vertical/>
 
+
+    <app-accordion-item title="one" selected>
+      lorem ipsum
+    </app-accordion-item>
+
+    <app-accordion-item title="two">
+      <em>lorem ipsum</em>
+    </app-accordion-item>
+
+    <app-accordion-item title="three">
+      <button class="btn btn-info" (click)="doSomething()">Click Me</button>
+      </app-accordion-item>
+
+      <br>
+      <br>
+      <br>
+
+      <app-accordion-item groupName="another" title="one" selected>
+      lorem ipsum
+    </app-accordion-item>
+
+    <app-accordion-item groupName="another" title="two">
+      <em>lorem ipsum</em>
+    </app-accordion-item>
+
+    <app-accordion-item groupName="another" title="three">
+      <button class="btn btn-info" (click)="doSomething()">Click Me</button>
+      </app-accordion-item>
   `,
 
   styles: `  /* la regola css non viene inserita in un array con parentesi quadre */
@@ -43,5 +71,9 @@ export class AppComponent {
     { start: '2022', end: 'bla bla' },
     { start: '2023', end: 'hello' },
   ]
+
+  doSomething() {
+    window.alert('Hello');
+  }
 }
 
