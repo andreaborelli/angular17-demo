@@ -29,6 +29,7 @@ import { AlertComponent } from "./shared/components/alert.component";
       (onConfirm)="approve()"
       denyLabel="Cancel"
       acceptLabel="Confirm"
+      variant="success"
     >
        this is a message
     </app-alert>
@@ -38,6 +39,7 @@ import { AlertComponent } from "./shared/components/alert.component";
     <app-alert
       (onCancel)="doSomethingAlert()"
       (onConfirm)="doSomethingElse()"
+      variant="error"
     >
 
     <div class="flex flex-col gap-5">

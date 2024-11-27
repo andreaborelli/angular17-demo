@@ -1,12 +1,22 @@
+import { NgClass } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'app-alert',
   standalone: true,
-  imports: [],
+  imports: [
+    NgClass
+  ],
   template: `
 
-    <div role="alert" class="alert">
+    <div role="alert"
+         class="alert"
+         [ngClass]="{
+          'alert-info': variant === 'info',
+          'alert-success': variant === 'success',
+          'alert-error': variant === 'error'
+          }"
+         >
 
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -40,5 +50,7 @@ export class AlertComponent {
   @Input() denyLabel = 'no'
 
   @Input() acceptLabel = 'yes'
+
+  @Input() variant: 'info' | 'success' | 'error' | undefined; // union literal types
 
 }
