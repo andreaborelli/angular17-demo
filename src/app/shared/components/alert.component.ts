@@ -7,6 +7,7 @@ import { Component, EventEmitter, Output } from '@angular/core';
   template: `
 
     <div role="alert" class="alert">
+
       <svg
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
@@ -18,12 +19,15 @@ import { Component, EventEmitter, Output } from '@angular/core';
           stroke-width="2"
           d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
       </svg>
-        <span>we use cookies for no reason.</span>
+
+      <div><ng-content></ng-content></div>
+
       <div>
         <button class="btn btn-sm" (click)="onCancel.emit()">Deny</button>
         <button class="btn btn-sm btn-primary" (click)="onConfirm.emit()">Accept</button>
       </div>
     </div>
+
   `,
   styles: ``
 })

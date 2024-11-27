@@ -22,16 +22,29 @@ import { AlertComponent } from "./shared/components/alert.component";
 ],
   template: `
 
-  <!-- Alert Component -->
+  <!-- Alert ngContent   -->
 
-  <app-alert
-  (onCancel)="cancel()"
-  (onConfirm)="approve()"
-  />
-  <app-alert
-  (onCancel)="doSomethingAlert()"
-  (onConfirm)="doSomethingElse()"
-  />
+    <app-alert
+      (onCancel)="cancel()"
+      (onConfirm)="approve()"
+    >
+       this is a message
+    </app-alert>
+
+      <br>
+
+    <app-alert
+      (onCancel)="doSomethingAlert()"
+      (onConfirm)="doSomethingElse()"
+    >
+
+    <div class="flex flex-col gap-5">
+      <em>this is messagge alert</em>
+      <strong>this is messagge strong</strong>
+      <input type="text" class="input input-bordered">
+    </div>
+
+  </app-alert>
 
     <app-timeline [items]="timeLineList"/>
         <!-- [items]="timeLineList" passiamo la proprietà items,
@@ -67,9 +80,6 @@ import { AlertComponent } from "./shared/components/alert.component";
     <app-accordion-item groupName="another" title="three">
       <button class="btn btn-info" (click)="doSomething()">Click Me</button>
       </app-accordion-item>
-
-
-
 
   `,
 
