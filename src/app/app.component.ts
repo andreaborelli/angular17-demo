@@ -50,6 +50,14 @@ import { AlertComponent } from "./shared/components/alert.component";
 
   </app-alert>
 
+  <div>
+  <app-alert>msg</app-alert>
+  <app-alert variant="info">msg</app-alert>
+  <app-alert variant="success">msg</app-alert>
+  <app-alert variant="error">msg</app-alert>
+  </div>
+
+
     <app-timeline [items]="timeLineList"/>
         <!-- [items]="timeLineList" passiamo la proprietà items,
          parentesi quadre perchè passiamo un'espressione
