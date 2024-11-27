@@ -36,9 +36,24 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
       <div><ng-content></ng-content></div>
 
       <div>
-        <button class="btn btn-sm" (click)="onCancel.emit()">{{ denyLabel }}</button>
-        <button class="btn btn-sm btn-primary" (click)="onConfirm.emit()">{{ acceptLabel }}</button>
+
+        <button class="btn btn-sm"
+            (click)="onCancel.emit()"
+            >{{ denyLabel }}
+            </button>
+
+        <button class="btn btn-sm"
+        [ngClass]="{
+                'btn-info': variant === 'info',
+                'btn-success': variant === 'success',
+                'btn-error': variant === 'error'
+              }"
+          (click)="onConfirm.emit()"
+          >{{ acceptLabel }}
+        </button>
+
       </div>
+      
     </div>
 
   `,
