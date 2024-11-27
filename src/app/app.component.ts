@@ -50,7 +50,7 @@ import { AlertComponent } from "./shared/components/alert.component";
 
   </app-alert>
 
-  <div>
+  <div class="flex flex-col gap-4 m-4" >
   <app-alert>msg</app-alert>
   <app-alert variant="info">msg</app-alert>
   <app-alert variant="success">msg</app-alert>
