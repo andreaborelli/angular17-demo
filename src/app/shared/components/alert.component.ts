@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'app-alert',
@@ -23,8 +23,8 @@ import { Component, EventEmitter, Output } from '@angular/core';
       <div><ng-content></ng-content></div>
 
       <div>
-        <button class="btn btn-sm" (click)="onCancel.emit()">Deny</button>
-        <button class="btn btn-sm btn-primary" (click)="onConfirm.emit()">Accept</button>
+        <button class="btn btn-sm" (click)="onCancel.emit()">{{ denyLabel }}</button>
+        <button class="btn btn-sm btn-primary" (click)="onConfirm.emit()">{{ acceptLabel }}</button>
       </div>
     </div>
 
@@ -36,5 +36,9 @@ export class AlertComponent {
   @Output() onCancel = new EventEmitter();
 
   @Output() onConfirm = new EventEmitter();
+
+  @Input() denyLabel = 'no'
+
+  @Input() acceptLabel = 'yes'
 
 }

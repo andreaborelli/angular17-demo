@@ -22,11 +22,13 @@ import { AlertComponent } from "./shared/components/alert.component";
 ],
   template: `
 
-  <!-- Alert ngContent   -->
+  <!-- Alert - inputs   -->
 
     <app-alert
       (onCancel)="cancel()"
       (onConfirm)="approve()"
+      denyLabel="Cancel"
+      acceptLabel="Confirm"
     >
        this is a message
     </app-alert>
