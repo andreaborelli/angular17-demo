@@ -6,6 +6,7 @@ import { PhoneComponent } from "./shared/components/phone.component";
 import { TimelineComponent } from "./shared/components/timeline.component";
 import { AccordionItemComponent } from "./shared/components/accordion-item.component";
 import { AlertComponent } from "./shared/components/alert.component";
+import { DropdownComponent } from "./shared/components/dropdown.component";
 
 
 @Component({
@@ -18,11 +19,17 @@ import { AlertComponent } from "./shared/components/alert.component";
     CommonModule,
     TimelineComponent,
     AccordionItemComponent,
-    AlertComponent
+    AlertComponent,
+    DropdownComponent
 ],
   template: `
 
-  <!-- Alert - inputs   -->
+  <!-- DropDown Component -->
+
+      <app-dropdown
+        [items]="list"
+      >CLICK</app-dropdown>
+
 
     <app-alert
       (onCancel)="cancel()"
@@ -93,6 +100,7 @@ import { AlertComponent } from "./shared/components/alert.component";
       <button class="btn btn-info" (click)="doSomething()">Click Me</button>
       </app-accordion-item>
 
+
   `,
 
   styles: `  /* la regola css non viene inserita in un array con parentesi quadre */
@@ -100,6 +108,12 @@ import { AlertComponent } from "./shared/components/alert.component";
   `,
 })
 export class AppComponent {
+
+  list = [
+    { label: 'Item 1', value: 1 },
+    { label: 'Item 2', value: 2 },
+    { label: 'Item 3', value: "something"},
+  ]
 
   timeLineList = [
     { start: '2014', end: 'description'},
