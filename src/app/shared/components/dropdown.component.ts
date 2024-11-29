@@ -35,7 +35,7 @@ export interface DropDownItem {
       <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow">
 
         @for (item of items; track $index) {
-          <li (click)="select.emit(item)"><a>{{ item.label }}</a></li>
+          <li (click)="itemClick(item)"><a>{{ item.label }}</a></li>
         }
 
       </ul>
@@ -56,5 +56,11 @@ export class DropdownComponent {
   @Input({transform: booleanAttribute}) hover = false;
 
   @Output() select = new EventEmitter<DropDownItem>();
+
+  itemClick(item: DropDownItem) {
+    this.select.emit(item);
+    const el = document.activeElement as HTMLElement;
+    el.blur(); // remove focus on practice closes the menu after clicking on the object element
+  }
 
 }
