@@ -6,7 +6,7 @@ import { PhoneComponent } from "./shared/components/phone.component";
 import { TimelineComponent } from "./shared/components/timeline.component";
 import { AccordionItemComponent } from "./shared/components/accordion-item.component";
 import { AlertComponent } from "./shared/components/alert.component";
-import { DropdownComponent } from "./shared/components/dropdown.component";
+import { DropdownComponent, DropDownItem } from "./shared/components/dropdown.component";
 
 
 @Component({
@@ -25,14 +25,12 @@ import { DropdownComponent } from "./shared/components/dropdown.component";
   template: `
 
   <!-- DropDown Component -->
-      <br>
-      <br>
-      <br>
-      <br>
-      <br>
-      <br>
-      <br>
-      <app-dropdown [items]="list">BOTTOM</app-dropdown>
+
+      <app-dropdown
+        [items]="list"
+          (select)="doSomethingItem($event)"
+        >BOTTOM</app-dropdown>
+        
       <app-dropdown [items]="list" palcenment='right' >RIGHT</app-dropdown>
       <app-dropdown [items]="list" placement="top">TOP</app-dropdown>
       <app-dropdown [items]="list" placement="left">LEFT</app-dropdown>
@@ -122,6 +120,11 @@ export class AppComponent {
     { label: 'Item 3', value: "something"},
   ]
 
+  doSomethingItem(event: DropDownItem) {
+    console.log('do Something', event);
+  }
+
+
   timeLineList = [
     { start: '2014', end: 'description'},
     { start: '2015', end: 'description'},
@@ -131,7 +134,7 @@ export class AppComponent {
   ]
 
   doSomething() {
-    window.alert('Hello');
+    window.alert('hello');
   }
 
 // Alert Component

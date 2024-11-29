@@ -1,5 +1,5 @@
 import { JsonPipe, NgClass } from '@angular/common';
-import { booleanAttribute, Component, Input } from '@angular/core';
+import { booleanAttribute, Component, EventEmitter, Input, Output } from '@angular/core';
 
 
 export interface DropDownItem {
@@ -35,7 +35,7 @@ export interface DropDownItem {
       <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow">
 
         @for (item of items; track $index) {
-          <li><a>{{ item.label }}</a></li>
+          <li (click)="select.emit(item)"><a>{{ item.label }}</a></li>
         }
 
       </ul>
@@ -54,5 +54,7 @@ export class DropdownComponent {
   @Input() placement: 'left' | 'right' | 'bottom' | 'top' = 'bottom';
 
   @Input({transform: booleanAttribute}) hover = false;
+
+  @Output() select = new EventEmitter<DropDownItem>();
 
 }
