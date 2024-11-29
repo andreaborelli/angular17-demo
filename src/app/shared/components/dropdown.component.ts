@@ -1,5 +1,5 @@
-import { JsonPipe } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { JsonPipe, NgClass } from '@angular/common';
+import { booleanAttribute, Component, Input } from '@angular/core';
 
 
 export interface DropDownItem {
@@ -11,25 +11,38 @@ export interface DropDownItem {
   selector: 'app-dropdown',
   standalone: true,
   imports: [
-    JsonPipe
+    JsonPipe,
+    NgClass
   ],
   template: `
 
-    <div class="dropdown">
-      <div tabindex="0" role="button" class="btn m-1">
+  <div
+    class="dropdown"
+      [ngClass]="{
+        'dropdown-top  dropdown-end': placement === 'top',
+        'dropdown-left': placement === 'left',
+        'dropdown-right': placement === 'right',
+        'dropdown-hover': hover
+      }"
+    >
+
+    <div tabindex="0" role="button" class="btn m-1">
 
         <ng-content></ng-content>
 
-      </div>
-        <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow">
+    </div>
+
+      <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow">
 
         @for (item of items; track $index) {
           <li><a>{{ item.label }}</a></li>
         }
-        </ul>
-    </div>
 
-    <pre>{{ items | json }}</pre>
+      </ul>
+
+  </div>
+
+    <!-- <pre>{{ items | json }}</pre> -->
 
   `,
   styles: ``
@@ -37,5 +50,9 @@ export interface DropDownItem {
 export class DropdownComponent {
 
   @Input() items: DropDownItem[] = [];
+
+  @Input() placement: 'left' | 'right' | 'bottom' | 'top' = 'bottom';
+
+  @Input({transform: booleanAttribute}) hover = false;
 
 }

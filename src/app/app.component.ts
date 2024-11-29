@@ -25,11 +25,18 @@ import { DropdownComponent } from "./shared/components/dropdown.component";
   template: `
 
   <!-- DropDown Component -->
-
-      <app-dropdown
-        [items]="list"
-      >CLICK</app-dropdown>
-
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <app-dropdown [items]="list">BOTTOM</app-dropdown>
+      <app-dropdown [items]="list" palcenment='right' >RIGHT</app-dropdown>
+      <app-dropdown [items]="list" placement="top">TOP</app-dropdown>
+      <app-dropdown [items]="list" placement="left">LEFT</app-dropdown>
+      <app-dropdown [items]="list" placement="left" hover>OVER</app-dropdown>
 
     <app-alert
       (onCancel)="cancel()"
