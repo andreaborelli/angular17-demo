@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { DropDownItem } from "./shared/components/dropdown.component";
 import { SharedModule } from './shared/shared.module';
 import { RouterOutlet } from '@angular/router';
-
+import { NavbarComponent } from './core/components/navbar.component';
 
 
 @Component({
@@ -10,19 +10,21 @@ import { RouterOutlet } from '@angular/router';
   standalone: true,
   imports: [
     SharedModule,
-    RouterOutlet
+    RouterOutlet,
+    NavbarComponent
+
 ],
   template: `
 
   <!-- Group Components -->
 
-  <button class="btn">Demo 1</button>
-  <button class="btn">Demo 2</button>
-  <button class="btn">Demo 3</button>
-  <hr>
+  <!-- navbar -->
 
-    <router-outlet/>
+    <app-navbar />
 
+    <div class="max-w-screen-lg mx-3 lg:mx-auto">
+      <router-outlet />
+    </div>
 
   <div class="mx-6">
 
