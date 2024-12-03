@@ -1,9 +1,8 @@
 import { Component } from '@angular/core';
 import { DropDownItem } from "./shared/components/dropdown.component";
 import { SharedModule } from './shared/shared.module';
-import { Demo1Component } from "./features/demo1/demo1.component";
-import { Demo2Component } from "./features/demo2/demo2.component";
-import { Demo3Component } from "./features/demo3/demo3.component";
+import { RouterOutlet } from '@angular/router';
+
 
 
 @Component({
@@ -11,9 +10,7 @@ import { Demo3Component } from "./features/demo3/demo3.component";
   standalone: true,
   imports: [
     SharedModule,
-    Demo1Component,
-    Demo2Component,
-    Demo3Component
+    RouterOutlet
 ],
   template: `
 
@@ -23,9 +20,9 @@ import { Demo3Component } from "./features/demo3/demo3.component";
   <button class="btn">Demo 2</button>
   <button class="btn">Demo 3</button>
   <hr>
-  <app-demo1/>
-  <app-demo2/>
-  <app-demo3/>
+
+    <router-outlet/>
+
 
   <div class="mx-6">
 
