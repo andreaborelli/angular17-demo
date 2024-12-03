@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
 import { DropDownItem } from "./shared/components/dropdown.component";
 import { SharedModule } from './shared/shared.module';
+import { Demo1Component } from "./features/demo1/demo1.component";
+import { Demo2Component } from "./features/demo2/demo2.component";
+import { Demo3Component } from "./features/demo3/demo3.component";
 
 
 @Component({
@@ -8,10 +11,21 @@ import { SharedModule } from './shared/shared.module';
   standalone: true,
   imports: [
     SharedModule,
+    Demo1Component,
+    Demo2Component,
+    Demo3Component
 ],
   template: `
 
   <!-- Group Components -->
+
+  <button class="btn">Demo 1</button>
+  <button class="btn">Demo 2</button>
+  <button class="btn">Demo 3</button>
+  <hr>
+  <app-demo1/>
+  <app-demo2/>
+  <app-demo3/>
 
   <div class="mx-6">
 
