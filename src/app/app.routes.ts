@@ -1,12 +1,24 @@
 import { Routes } from '@angular/router';
 
 export const routes: Routes = [
-  { path: 'demo1', loadComponent: () => import('./features/demo1/demo1.component').then(c => c.Demo1Component) },
-  { path: 'demo2', loadComponent: () => import('./features/demo2/demo2.component').then(c => c.Demo2Component) },
-  { path: 'demo3', loadComponent: () => import('./features/demo3/demo3.component').then(c => c.Demo3Component) },
-
+  { path: 'demo1', loadComponent: () => import('./features/demo1/demo1.component') },
+  { path: 'demo2', loadComponent: () => import('./features/demo2/demo2.component') },
+  { path: 'demo3', loadComponent: () => import('./features/demo3/demo3.component') },
   { path: '', redirectTo: 'demo1', pathMatch: 'full' }
 ];
+
+  /*
+    da Angular 15 in su è possibile rimuovere il:
+    .then(c => c.Demo1Component)
+    è per far saper al loadComponent quale file caricare
+    bisogna esportare il componente come default:
+
+      export default class Demo1Component {
+
+      }
+    così facendo non è più necessario specificare appunto tramite la promise.
+    così le regole di router sono meno verbose.
+  */
 
   /* pathMatch: definisce la strategia di matching (maccing)
   tra url e il path.

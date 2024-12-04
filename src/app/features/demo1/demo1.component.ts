@@ -11,6 +11,6 @@ import { Component } from '@angular/core';
   `,
   styles: ``
 })
-export class Demo1Component {
+export default class Demo1Component {
 
 }
