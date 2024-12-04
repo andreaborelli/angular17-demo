@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { DropDownItem } from "./shared/components/dropdown.component";
 import { SharedModule } from './shared/shared.module';
-import { RouterOutlet } from '@angular/router';
+import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { NavbarComponent } from './core/components/navbar.component';
 
 
@@ -126,6 +126,86 @@ import { NavbarComponent } from './core/components/navbar.component';
   `,
 })
 export class AppComponent {
+
+  /*
+    Il router offre una serie di classi,
+    chiamati servizi, che ci offrono la
+    possibilità di avere diverse informazioni
+    sul router e diversi utility, ad esempio
+    possiamo sapere qul'è la route corrente,
+    rimane in ascolto degli eventi del router,
+    effettuare un redirect ad una pagina
+    non dal template ma via JavaScript ecc.
+
+    Per iniettare un servizio possiamo usare
+    il costruttore del componente in cui definiamo
+    il nome della variabile che conterrà la reference
+    all'istanza del servizio che stiamo iniettando
+    e con due punti definiamo il nome del servizio
+    che stiamo iniettando, in questo caso Router
+    con l'importazione di Router dal package @angular/router
+
+   non dovremmo fare un new router, non dovremmo creare
+   una nuova istanza manualmente ma dovremo semplicemente
+   iniettare l'istanza che il router ha già creato per noi,
+   c'è la rende globalmente, è la stiamo iniettando:
+   (router: Router)
+   cambio di url via JavaScript: router.navigateByUrl
+
+  al refresh della pagina, cambio di url, cioè cambio pagina:
+
+     setTimeout(() => {
+       router.navigateByUrl('demo1');
+    }, 4000);
+
+  Oppure possiamo rimanere in ascolto degli eventi del router
+  roter.events, che ci fornisce un observable,
+  da immaginare come uno stream di dati che possiamo
+  sottoscrivere, quando cambiamo pagina il router emette
+  in questo stream di dat, cioè nel observable, un evento.
+  lo sottoscriviamo rimaniamo in ascolto,
+  riceviamo l'evento facendo un console.log.
+
+  le fasi del router sono diverse,
+  per ogni cambio di router parte da un navigation start
+  con diverse fasi del router e arriviamo fino a navigation end
+  stessa cosa quando cambiamo route.
+
+  per sapere qual'è la route corrente es.
+  voler tracciare il cambio router con google analitics
+  o avviare qualche azione sul server ecc.
+
+  ogni volta che la route viene cambiata
+
+    router.events.subscribe(event => {
+  if( event instanceof NavigationEnd) { //è una guardia per sapere se l'evento è di tipo NavigationEnd
+    console.log('event', event);
+  }
+  */
+
+  /*
+    Un'altra tecnica per iniettare un servizio disponibile da
+    Angular 15 in poi è quella di usare invece la funzione inject
+    creiamo una proprietà della classe chiamata router
+    usiamo la funzione inject importata da @angular/core
+    è definiamo quale servizio iniettare all'interno del nostro componente
+    l'unica differenza è che nel costruttore non avremo accesso
+    direttamente alla proprietà router ma a this.router
+    visto che è diventata una proprietà della classe es. AppComponent
+
+    è molto comodo perchè quando creeremo altri metodi nel componente
+    potremmo accedere direttamente alla proprietà router con this.router.
+  */
+
+  router = inject(Router)
+
+  constructor() {
+      this.router.events.subscribe(event => {
+        if( event instanceof NavigationEnd) { //è una guardia per sapere se l'evento è di tipo NavigationEnd
+          console.log(event.url);
+        }
+      });
+  }
 
   url = 'assets/images/pexels.png'
   alt = 'landscape'
