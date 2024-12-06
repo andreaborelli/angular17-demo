@@ -1,13 +1,30 @@
 import { Routes } from '@angular/router';
 
 export const routes: Routes = [
-  { path: 'demo1', loadComponent: () => import('./features/demo1/demo1.component'),
-    data: { title: 'Hello Demo 1' }
-   },
+  {
+    path: 'demo1', loadComponent: () => import('./features/demo1/demo1.component'),
+    data: { title: 'Hello Demo 1'}
+  },
   { path: 'demo2', loadComponent: () => import('./features/demo2/demo2.component') },
   { path: 'demo3', loadComponent: () => import('./features/demo3/demo3.component') },
+  { path: 'product', redirectTo: 'product/1', pathMatch: 'full' },
+  { path: 'product/:productId', loadComponent: () => import('./features/product/product.component') },
   { path: '', redirectTo: 'demo1', pathMatch: 'full' }
 ];
+
+  /*
+  Una root può anche ricevere dei parametri dall'url es
+  se accediamo dall'url http://localhost:4200/product/qualunquevalore
+  riceveremmo un errore perchè il path è /product/ non /product/qualunquevalore
+  perchè quel path non esiste, ma per risolvere bisogna aggiungere al path:
+    path: 'product/productId',
+
+    per recuperare dalla pagina il productId bisogna iniettare
+
+     activateRoute = inject(ActivatedRoute);
+
+     con shapshot.params['productId'] possiamo recuperare il valore
+  */
 
   /*
   Tramite le regole del router è possibile passare ad una root,
