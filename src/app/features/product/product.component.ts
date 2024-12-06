@@ -1,5 +1,5 @@
-import { Component, inject } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { Component,  Input } from '@angular/core';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-product',
@@ -19,15 +19,7 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
   styles: ``
 })
 export default class ProductComponent {
-  activatedRoute = inject(ActivatedRoute)
-  productId: string | undefined;
 
-  constructor() {
-    console.log(this.activatedRoute.snapshot.params['productId'])
+  @Input() productId: string | undefined;
 
-    this.activatedRoute.params.subscribe(params => {
-      console.log(params)
-      this.productId = params['productId']
-    })
-  }
 }
